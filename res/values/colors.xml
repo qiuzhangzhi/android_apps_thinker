@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="thinker_basic_color">#ED2F39</color>
+
+    <!-- 基本颜色表 -->
+    <color name="transparent">#00000000</color>
+    <color name="darker_gray">#aaa</color>
+    <color name="white">#ffffff</color>
+
+    <!-- actionbar -->
+    <color name="actionbar_pressed_background">#30000000</color>
+</resources>

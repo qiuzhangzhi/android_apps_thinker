@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources >
+
+    <style name="ThinkerStyle" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/ThinkerActionBarStyle</item>
+    </style>
+
+    <style name="ThinkerActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/thinker_basic_color</item>
+    </style>
+</resources>
