@@ -1,10 +1,16 @@
-package com.grasp.thinker;
+package com.grasp.thinker.ui.activitys;
 
+import com.grasp.thinker.R;
 import com.grasp.thinker.adapters.PageAdapter;
-import com.grasp.thinker.ui.fragment.EnumFragment;
+import com.grasp.thinker.ui.EnumFragment;
+import com.grasp.thinker.utils.MusicUtils;
 
 import android.app.ActionBar;
+import android.content.ComponentName;
+import android.content.ServiceConnection;
+import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -16,7 +22,8 @@ import android.widget.TextView;
 /**
  * Created by qiuzhangzhi on 15/1/4.
  */
-public class HomeActivity extends FragmentActivity implements ViewPager.OnPageChangeListener,View.OnClickListener{
+public class HomeActivity extends FragmentActivity implements ViewPager.OnPageChangeListener,View.OnClickListener,
+        ServiceConnection{
 
     private final static int LOCAL_MUSIC = 0;
 
@@ -33,6 +40,8 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
     private TextView mActionBarLocalMusic;
 
     private TextView mActionBarSetting;
+
+    private MusicUtils.ServiceToken mToken;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,6 +74,23 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         mActionBar.setDisplayShowTitleEnabled(false);
 
         mActionBar.setCustomView(mCustomActionBarView);
+
+
+        // Control the media volume
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+        // Bind Thinker's service
+        mToken = MusicUtils.bindToService(this, this);
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+
     }
 
     @Override

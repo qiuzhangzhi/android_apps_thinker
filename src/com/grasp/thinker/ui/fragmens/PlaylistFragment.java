@@ -1,9 +1,10 @@
-package com.grasp.thinker.ui.fragment;
+package com.grasp.thinker.ui.fragmens;
 
 import com.grasp.thinker.R;
 import com.grasp.thinker.adapters.SongAdapter;
 import com.grasp.thinker.loaders.SongLoader;
 import com.grasp.thinker.model.Song;
+import com.grasp.thinker.utils.MusicUtils;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.List;
@@ -19,7 +21,8 @@ import java.util.List;
 /**
  * Created by qiuzhangzhi on 15/1/5.
  */
-public class PlaylistFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Song>>{
+public class PlaylistFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Song>>
+,AdapterView.OnItemClickListener{
 
     private final static int SONG_LOADER = 0;
 
@@ -44,7 +47,7 @@ public class PlaylistFragment extends Fragment implements LoaderManager.LoaderCa
 
         mListView = (ListView)mRootView.findViewById(R.id.song_list);
         mListView.setAdapter(mSongAdapter);
-
+        mListView.setOnItemClickListener(this);
         return mRootView;
     }
 
@@ -68,5 +71,10 @@ public class PlaylistFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onLoaderReset(Loader<List<Song>> loader) {
 
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        MusicUtils.playAllFromUserItemClick(getActivity(),mSongAdapter,position);
     }
 }

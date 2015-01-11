@@ -1,4 +1,4 @@
-package com.grasp.thinker.ui.fragment;
+package com.grasp.thinker.ui.fragmens;
 
 import com.grasp.thinker.R;
 

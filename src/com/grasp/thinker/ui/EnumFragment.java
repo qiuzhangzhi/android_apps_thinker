@@ -1,4 +1,7 @@
-package com.grasp.thinker.ui.fragment;
+package com.grasp.thinker.ui;
+
+import com.grasp.thinker.ui.fragmens.PlaylistFragment;
+import com.grasp.thinker.ui.fragmens.SettingFragment;
 
 import android.support.v4.app.Fragment;
 
