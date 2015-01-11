@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--text size-->
+    <dimen name="text_size_large">16dp</dimen>
+
+    <dimen name="text_size_nomal">14sp</dimen>
+
+    <dimen name="text_size_small">12sp</dimen>
+
+    <!-- actionbar -->
+    <dimen name="actionbar_button_padding">20dp</dimen>
+
+    <!-- listview item -->
+    <dimen name="item_padding_large">10dp</dimen>
+    <dimen name="item_padding_nomal">8dp</dimen>
+    <dimen name="item_padding_small">5dp</dimen>
+</resources>

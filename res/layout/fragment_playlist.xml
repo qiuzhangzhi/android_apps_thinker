@@ -6,17 +6,12 @@
               android:layout_height="match_parent"
 
         >
-    <ImageButton
-            android:id="@+id/action_local"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
 
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="20dp"
-
-            android:src="@drawable/action_local"
-            android:background="@drawable/selector_actionbar_button"
-            />
-
-
+    <ListView
+            android:id="@+id/song_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            >
+    </ListView>
 </LinearLayout>

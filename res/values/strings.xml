@@ -2,9 +2,12 @@
 <resources>
     <string name="app_name">Thinker</string>
 
+    <!-- common -->
+    <string name="divider_artist_album">%1$s - %2$s</string>
     <!-- actionbar -->
     <string name="actionbar_music">音乐</string>
     <string name="actionbar_setting">设置</string>
+
 
 
 </resources>

@@ -16,11 +16,12 @@ import android.widget.TextView;
 /**
  * Created by qiuzhangzhi on 15/1/4.
  */
-public class HomeActivity extends FragmentActivity implements ViewPager.OnPageChangeListener{
+public class HomeActivity extends FragmentActivity implements ViewPager.OnPageChangeListener,View.OnClickListener{
 
     private final static int LOCAL_MUSIC = 0;
 
     private final static int SETTING = 1;
+
     private ActionBar mActionBar;
 
     private View mCustomActionBarView;
@@ -32,6 +33,7 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
     private TextView mActionBarLocalMusic;
 
     private TextView mActionBarSetting;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +46,7 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
     }
 
     private void init(){
+
         mCustomActionBarView = LayoutInflater.from(HomeActivity.this).inflate(R.layout.actionbar_custom,null);
 
         mViewPager = (ViewPager)findViewById(R.id.view_pager);
@@ -88,6 +91,18 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
 
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.action_local:
+                mViewPager.setCurrentItem(LOCAL_MUSIC);
+                break;
+            case R.id.action_setting:
+                mViewPager.setCurrentItem(SETTING);
+                break;
+        }
+    }
+
     private void findViews(){
         mActionBarLocalMusic = (TextView)mCustomActionBarView.findViewById(R.id.action_local);
         mActionBarSetting = (TextView)mCustomActionBarView.findViewById(R.id.action_setting);
@@ -95,6 +110,9 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
 
     private void setListener(){
         mViewPager.setOnPageChangeListener(this);
+
+        mActionBarLocalMusic.setOnClickListener(this);
+        mActionBarSetting.setOnClickListener(this);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

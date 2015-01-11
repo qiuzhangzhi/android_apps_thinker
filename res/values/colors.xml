@@ -5,7 +5,10 @@
     <!-- 基本颜色表 -->
     <color name="transparent">#00000000</color>
     <color name="darker_gray">#aaa</color>
+    <color name="gray">#c9c9c9</color>
+    <color name="lighter_gray">#ddd</color>
     <color name="white">#ffffff</color>
+    <color name="black">#ff000000</color>
 
     <!-- actionbar -->
     <color name="actionbar_pressed_background">#30000000</color>
