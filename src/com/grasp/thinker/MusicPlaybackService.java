@@ -48,7 +48,9 @@ public class MusicPlaybackService extends Service {
     private MusicPlayerHandler mPlayerHandler;
 
     private MultiPlayer mPlayer;
+
     private final IBinder mBinder = new ServiceStub(this);
+
     private static final String[] PROJECTION = new String[] {
             "audio._id AS _id", MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media.ALBUM,
             MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.DATA,
@@ -219,6 +221,20 @@ public class MusicPlaybackService extends Service {
         }
 
     }
+    public boolean openFile(final String path){
+        synchronized (this){
+            mFileToPlay = path;
+            mPlayer.setDataSource(mFileToPlay);
+            if (mPlayer.isInitialized()) {
+                //  mOpenFailedCounter = 0;
+                return true;
+            }
+            stop(true);
+            return false;
+        }
+    }
+
+
 
     private void openCurrentAndNext(){
         openCurrentMaybeNext(true);
@@ -244,18 +260,6 @@ public class MusicPlaybackService extends Service {
 
     }
 
-    public boolean openFile(final String path){
-        synchronized (this){
-            mFileToPlay = path;
-            mPlayer.setDataSource(mFileToPlay);
-            if (mPlayer.isInitialized()) {
-              //  mOpenFailedCounter = 0;
-                return true;
-            }
-            stop(true);
-            return false;
-        }
-    }
 
     private void updateCursor(final long trackId){
         updateCursor("_id=" + trackId, null);

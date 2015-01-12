@@ -13,10 +13,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-
-import java.util.Arrays;
 
 /**
  * Created by qiuzhangzhi on 15/1/11.
@@ -34,7 +30,9 @@ public class MusicUtils {
             realActivity = (Activity)context;
         }
         final ContextWrapper contextWrapper = new ContextWrapper(realActivity);
+
         contextWrapper.startService(new Intent(contextWrapper, MusicPlaybackService.class));
+
         final ServiceBinder binder = new ServiceBinder(callback);
         if (contextWrapper.bindService(
                 new Intent().setClass(contextWrapper, MusicPlaybackService.class), binder, 0)) {
@@ -111,17 +109,15 @@ public class MusicUtils {
             if (position < 0) {
                 position = 0;
             }*/
-            mService.open(list, forceShuffle ? -1 : position);
+            mService.open(list,position);
             mService.play();
         } catch (final RemoteException ignored) {
         }}
     public static void playAllFromUserItemClick(final Context context,
             SongAdapter adapter, final int position) {
-        if (adapter.getViewTypeCount() > 1 && position == 0) {
-            return;
-        }
+
         final long[] list = MusicUtils.getSongListForAdapter(adapter);
-        int pos = adapter.getViewTypeCount() > 1 ? position - 1 : position;
+        int pos = position;
         if (list.length == 0) {
             pos = 0;
         }
@@ -134,10 +130,10 @@ public class MusicUtils {
         }
         long[] list = {};
         if (adapter != null) {
-            int count = adapter.getCount() - (adapter.getViewTypeCount() > 1 ? 1 : 0);
+            int count = adapter.getCount();
             list = new long[count];
             for (int i = 0; i < count; i++) {
-                list[i] = ((Song) adapter.getItem(i)).mSongId;
+                list[i] = (adapter.getItem(i)).mSongId;
             }
         }
         return list;
