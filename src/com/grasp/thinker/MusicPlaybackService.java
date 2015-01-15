@@ -26,6 +26,10 @@ import java.lang.ref.WeakReference;
  */
 public class MusicPlaybackService extends Service {
 
+    private boolean mIsSupposedToBePlaying = false;
+
+    private static final int TRACK_WENT_TO_NEXT = 2;
+
     private final static String TAG = "MusicPlaybackService" ;
 
     private static final int IDCOLIDX = 0;
@@ -103,15 +107,15 @@ public class MusicPlaybackService extends Service {
                 MediaButtonIntentReceiver.class.getName()));*/
 
         if (mPlayer.isInitialized()) {
-          //  setNextTrack();
+            setNextTrack();
 
             final long duration = mPlayer.duration();
-         /*   if (mRepeatMode != REPEAT_CURRENT && duration > 2000
-                    && mPlayer.position() >= duration - 2000) {
+           if ( duration > 2000 && mPlayer.position() >= duration - 2000) {
                 gotoNext(true);
-            }*/
+            }
 
             mPlayer.start();
+            mIsSupposedToBePlaying = true;
            /* mPlayerHandler.removeMessages(FADEDOWN);
             mPlayerHandler.sendEmptyMessage(FADEUP);
 
@@ -134,6 +138,7 @@ public class MusicPlaybackService extends Service {
        // if (D) Log.d(TAG, "Pausing playback");
         synchronized (this) {
             mPlayer.pause();
+            mIsSupposedToBePlaying = false;
           //  mPlayerHandler.removeMessages(FADEUP);
         /*    if (mIsSupposedToBePlaying) {
                 mPlayer.pause();
@@ -211,6 +216,26 @@ public class MusicPlaybackService extends Service {
 
     }
 
+
+    /**
+     * @return True if music is playing, false otherwise
+     */
+    public boolean isPlaying() {
+        return mIsSupposedToBePlaying;
+    }
+
+    public boolean isInitialized(){
+        synchronized (this){
+            return mPlayer.isInitialized();
+        }
+
+    }
+
+    public int getQueuePosition(){
+        synchronized (this) {
+            return mPlayPos;
+        }
+    }
     public void open(final long[] list, final int position){
         synchronized (this){
             mPlayList = list;
@@ -235,6 +260,22 @@ public class MusicPlaybackService extends Service {
     }
 
 
+    private void setNextTrack() {
+        mNextPlayPos = getNextPosition();
+        if (mNextPlayPos >= 0 && mPlayList != null) {
+            final long id = mPlayList[mNextPlayPos];
+            mPlayer.setNextDataSource(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/" + id);
+        } else {
+            mPlayer.setNextDataSource(null);
+        }
+    }
+    private int getNextPosition(){
+        if (mPlayPos >= mPlayListLen - 1) {
+                return 0;
+        } else {
+            return mPlayPos + 1;
+        }
+    }
 
     private void openCurrentAndNext(){
         openCurrentMaybeNext(true);
@@ -255,6 +296,10 @@ public class MusicPlaybackService extends Service {
                 // we're either going to create a new one next, or stop trying
                 closeCursor();
 
+            }
+
+            if(openNext){
+                setNextTrack();
             }
         }
 
@@ -322,6 +367,14 @@ public class MusicPlaybackService extends Service {
             }
 
             switch (msg.what) {
+                case TRACK_WENT_TO_NEXT:
+                    service.mPlayPos = service.mNextPlayPos;
+                    if (service.mCursor != null) {
+                        service.mCursor.close();
+                    }
+                    service.updateCursor(service.mPlayList[service.mPlayPos]);
+                    service.setNextTrack();
+                    break;
         /*        case FADEDOWN:
                     mCurrentVolume -= .05f;
                     if (mCurrentVolume > .2f) {
@@ -632,7 +685,7 @@ public class MusicPlaybackService extends Service {
                 mCurrentMediaPlayer.release();
                 mCurrentMediaPlayer = mNextMediaPlayer;
                 mNextMediaPlayer = null;
-                //mHandler.sendEmptyMessage(TRACK_WENT_TO_NEXT);
+                mHandler.sendEmptyMessage(TRACK_WENT_TO_NEXT);
             } else {
                /* mService.get().mWakeLock.acquire(30000);
                 mHandler.sendEmptyMessage(TRACK_ENDED);
@@ -705,8 +758,19 @@ public class MusicPlaybackService extends Service {
             mService.get().gotoNext(true);
         }
 
+        @Override
+        public boolean isPlaying() throws RemoteException {
+            return mService.get().isPlaying();
+        }
 
+        @Override
+        public boolean isInitialized() throws RemoteException {
+            return mService.get().isInitialized();
+        }
 
-
+        @Override
+        public int getQueuePosition() throws RemoteException {
+            return mService.get().getQueuePosition();
+        }
     }
 }

@@ -53,6 +53,7 @@ public class SongLoader extends WrappedAsyncTaskLoader<List<Song>> {
         mSelectionClause.append(Audio.AudioColumns.IS_MUSIC + "= 1 ");
         mSelectionClause.append("AND "+ Audio.AudioColumns.TITLE + " !='' ");
         mSelectionClause.append("AND "+ Audio.AudioColumns.TITLE + " NOT GLOB '[0-9]*' ");
+        mSelectionClause.append("AND "+ Audio.AudioColumns.TITLE + " NOT GLOB '通话*' ");
         return context.getContentResolver().query(
 
                 Audio.Media.EXTERNAL_CONTENT_URI,

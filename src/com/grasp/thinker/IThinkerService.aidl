@@ -9,5 +9,8 @@ interface IThinkerService{
     void play();
     void next();
     void prev();
+    boolean isPlaying();
+    boolean isInitialized();
+    int getQueuePosition();
 
 }

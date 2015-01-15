@@ -81,6 +81,22 @@ public class MusicUtils {
     }
 
     /**
+     * Plays or pauses the music.
+     */
+    public static void playOrPause() {
+        try {
+            if (mService != null) {
+                if (mService.isPlaying()) {
+                    mService.pause();
+                } else {
+                    mService.play();
+                }
+            }
+        } catch (final Exception ignored) {
+        }
+    }
+
+    /**
      * @param context The {@link Context} to use.
      * @param list The list of songs to play.
      * @param position Specify where to start.
@@ -109,12 +125,18 @@ public class MusicUtils {
             if (position < 0) {
                 position = 0;
             }*/
-            mService.open(list,position);
-            mService.play();
+            if(position == mService.getQueuePosition() && mService.isInitialized()){
+                   playOrPause();
+            }else{
+                mService.open(list,position);
+                mService.play();
+            }
+
         } catch (final RemoteException ignored) {
         }}
     public static void playAllFromUserItemClick(final Context context,
             SongAdapter adapter, final int position) {
+
 
         final long[] list = MusicUtils.getSongListForAdapter(adapter);
         int pos = position;

@@ -75,6 +75,7 @@ public class PlaylistFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
         MusicUtils.playAllFromUserItemClick(getActivity(),mSongAdapter,position);
     }
 }

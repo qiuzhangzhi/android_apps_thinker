@@ -92,6 +92,30 @@ this.prev();
 reply.writeNoException();
 return true;
 }
+case TRANSACTION_isPlaying:
+{
+data.enforceInterface(DESCRIPTOR);
+boolean _result = this.isPlaying();
+reply.writeNoException();
+reply.writeInt(((_result)?(1):(0)));
+return true;
+}
+case TRANSACTION_isInitialized:
+{
+data.enforceInterface(DESCRIPTOR);
+boolean _result = this.isInitialized();
+reply.writeNoException();
+reply.writeInt(((_result)?(1):(0)));
+return true;
+}
+case TRANSACTION_getQueuePosition:
+{
+data.enforceInterface(DESCRIPTOR);
+int _result = this.getQueuePosition();
+reply.writeNoException();
+reply.writeInt(_result);
+return true;
+}
 }
 return super.onTransact(code, data, reply, flags);
 }
@@ -197,6 +221,57 @@ _reply.recycle();
 _data.recycle();
 }
 }
+@Override public boolean isPlaying() throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+boolean _result;
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+mRemote.transact(Stub.TRANSACTION_isPlaying, _data, _reply, 0);
+_reply.readException();
+_result = (0!=_reply.readInt());
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+return _result;
+}
+@Override public boolean isInitialized() throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+boolean _result;
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+mRemote.transact(Stub.TRANSACTION_isInitialized, _data, _reply, 0);
+_reply.readException();
+_result = (0!=_reply.readInt());
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+return _result;
+}
+@Override public int getQueuePosition() throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+int _result;
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+mRemote.transact(Stub.TRANSACTION_getQueuePosition, _data, _reply, 0);
+_reply.readException();
+_result = _reply.readInt();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+return _result;
+}
 }
 static final int TRANSACTION_openFile = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
 static final int TRANSACTION_open = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
@@ -204,6 +279,9 @@ static final int TRANSACTION_pause = (android.os.IBinder.FIRST_CALL_TRANSACTION 
 static final int TRANSACTION_play = (android.os.IBinder.FIRST_CALL_TRANSACTION + 3);
 static final int TRANSACTION_next = (android.os.IBinder.FIRST_CALL_TRANSACTION + 4);
 static final int TRANSACTION_prev = (android.os.IBinder.FIRST_CALL_TRANSACTION + 5);
+static final int TRANSACTION_isPlaying = (android.os.IBinder.FIRST_CALL_TRANSACTION + 6);
+static final int TRANSACTION_isInitialized = (android.os.IBinder.FIRST_CALL_TRANSACTION + 7);
+static final int TRANSACTION_getQueuePosition = (android.os.IBinder.FIRST_CALL_TRANSACTION + 8);
 }
 public void openFile(java.lang.String path) throws android.os.RemoteException;
 public void open(long[] list, int position) throws android.os.RemoteException;
@@ -211,4 +289,7 @@ public void pause() throws android.os.RemoteException;
 public void play() throws android.os.RemoteException;
 public void next() throws android.os.RemoteException;
 public void prev() throws android.os.RemoteException;
+public boolean isPlaying() throws android.os.RemoteException;
+public boolean isInitialized() throws android.os.RemoteException;
+public int getQueuePosition() throws android.os.RemoteException;
 }
