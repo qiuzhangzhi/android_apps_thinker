@@ -26,11 +26,16 @@ import java.lang.ref.WeakReference;
  */
 public class MusicPlaybackService extends Service {
 
+    private final static String TAG = "MusicPlaybackService" ;
+
+    public static final String PLAYSTATE_CHANGED = "com.grasp.thinker.playstatechanged";
+
+    public static final String META_CHANGED = "com.andrew.apollo.metachanged";
+
     private boolean mIsSupposedToBePlaying = false;
 
     private static final int TRACK_WENT_TO_NEXT = 2;
 
-    private final static String TAG = "MusicPlaybackService" ;
 
     private static final int IDCOLIDX = 0;
 
@@ -113,9 +118,10 @@ public class MusicPlaybackService extends Service {
            if ( duration > 2000 && mPlayer.position() >= duration - 2000) {
                 gotoNext(true);
             }
-
-            mPlayer.start();
             mIsSupposedToBePlaying = true;
+            mPlayer.start();
+            notifyChange(META_CHANGED);
+            notifyChange(PLAYSTATE_CHANGED);
            /* mPlayerHandler.removeMessages(FADEDOWN);
             mPlayerHandler.sendEmptyMessage(FADEUP);
 
@@ -139,6 +145,7 @@ public class MusicPlaybackService extends Service {
         synchronized (this) {
             mPlayer.pause();
             mIsSupposedToBePlaying = false;
+            notifyChange(PLAYSTATE_CHANGED);
           //  mPlayerHandler.removeMessages(FADEUP);
         /*    if (mIsSupposedToBePlaying) {
                 mPlayer.pause();
@@ -236,6 +243,34 @@ public class MusicPlaybackService extends Service {
             return mPlayPos;
         }
     }
+
+    public String getTrackName() {
+        synchronized (this) {
+            if (mCursor == null) {
+                return null;
+            }
+            return mCursor.getString(mCursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.TITLE));
+        }
+    }
+
+    public String getAlbumName() {
+        synchronized (this) {
+            if (mCursor == null) {
+                return null;
+            }
+            return mCursor.getString(mCursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.ALBUM));
+        }
+    }
+
+    public String getArtistName() {
+        synchronized (this) {
+            if (mCursor == null) {
+                return null;
+            }
+            return mCursor.getString(mCursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.ARTIST));
+        }
+    }
+
     public void open(final long[] list, final int position){
         synchronized (this){
             mPlayList = list;
@@ -259,6 +294,11 @@ public class MusicPlaybackService extends Service {
         }
     }
 
+
+    private void notifyChange(final String what){
+        Intent intent = new Intent(what);
+        sendBroadcast(intent);
+    }
 
     private void setNextTrack() {
         mNextPlayPos = getNextPosition();
@@ -374,6 +414,7 @@ public class MusicPlaybackService extends Service {
                     }
                     service.updateCursor(service.mPlayList[service.mPlayPos]);
                     service.setNextTrack();
+                    service.notifyChange(META_CHANGED);
                     break;
         /*        case FADEDOWN:
                     mCurrentVolume -= .05f;
@@ -771,6 +812,21 @@ public class MusicPlaybackService extends Service {
         @Override
         public int getQueuePosition() throws RemoteException {
             return mService.get().getQueuePosition();
+        }
+
+        @Override
+        public String getTrackName() throws RemoteException {
+            return mService.get().getTrackName();
+        }
+
+        @Override
+        public String getArtistName() throws RemoteException {
+            return mService.get().getArtistName();
+        }
+
+        @Override
+        public String getAlbumName() throws RemoteException {
+            return mService.get().getAlbumName();
         }
     }
 }

@@ -13,4 +13,8 @@ interface IThinkerService{
     boolean isInitialized();
     int getQueuePosition();
 
+    String getArtistName();
+    String getTrackName();
+    String getAlbumName();
+
 }

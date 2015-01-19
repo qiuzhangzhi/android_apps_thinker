@@ -85,7 +85,7 @@ public class MusicUtils {
      */
     public static void playOrPause() {
         try {
-            if (mService != null) {
+            if (mService != null && mService.isInitialized()) {
                 if (mService.isPlaying()) {
                     mService.pause();
                 } else {
@@ -95,7 +95,51 @@ public class MusicUtils {
         } catch (final Exception ignored) {
         }
     }
+    public static final boolean isPlaying() {
+        if (mService != null) {
+            try {
+                return mService.isPlaying();
+            } catch (final RemoteException ignored) {
+            }
+        }
+        return false;
+    }
 
+    public static final String getTrackName() {
+        if (mService != null) {
+            try {
+                return mService.getTrackName();
+            } catch (final RemoteException ignored) {
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @return The current artist name.
+     */
+    public static final String getArtistName() {
+        if (mService != null) {
+            try {
+                return mService.getArtistName();
+            } catch (final RemoteException ignored) {
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @return The current album name.
+     */
+    public static final String getAlbumName() {
+        if (mService != null) {
+            try {
+                return mService.getAlbumName();
+            } catch (final RemoteException ignored) {
+            }
+        }
+        return null;
+    }
     /**
      * @param context The {@link Context} to use.
      * @param list The list of songs to play.

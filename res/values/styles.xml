@@ -8,4 +8,21 @@
     <style name="ThinkerActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:background">@color/thinker_basic_color</item>
     </style>
+
+    <style name="BottomActionBarText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="BottomActionBarItem">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center|right</item>
+        <item name="android:scaleType">centerCrop</item>
+    </style>
 </resources>

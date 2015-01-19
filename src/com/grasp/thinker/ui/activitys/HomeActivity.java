@@ -1,12 +1,18 @@
 package com.grasp.thinker.ui.activitys;
 
+import com.grasp.thinker.MusicPlaybackService;
 import com.grasp.thinker.R;
 import com.grasp.thinker.adapters.PageAdapter;
 import com.grasp.thinker.ui.EnumFragment;
 import com.grasp.thinker.utils.MusicUtils;
+import com.grasp.thinker.widgets.PlayPauseButton;
 
 import android.app.ActionBar;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -19,6 +25,8 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by qiuzhangzhi on 15/1/4.
  */
@@ -28,6 +36,8 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
     private final static int LOCAL_MUSIC = 0;
 
     private final static int SETTING = 1;
+
+    private PlaybackStatus mPlaybackStatus;
 
     private ActionBar mActionBar;
 
@@ -41,6 +51,13 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
 
     private TextView mActionBarSetting;
 
+    //底部 actionbar
+    private TextView mBABTrackName;
+
+    private TextView mBABAlbumInfo;
+
+    private PlayPauseButton mBABPlayPauseButton;
+
     private MusicUtils.ServiceToken mToken;
 
     @Override
@@ -52,6 +69,22 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         findViews();
         setListener();
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        final IntentFilter filter = new IntentFilter();
+        filter.addAction(MusicPlaybackService.META_CHANGED);
+        filter.addAction(MusicPlaybackService.PLAYSTATE_CHANGED);
+        registerReceiver(mPlaybackStatus,filter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateBotomActionBarInfo();
     }
 
     private void init(){
@@ -81,11 +114,14 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
 
         // Bind Thinker's service
         mToken = MusicUtils.bindToService(this, this);
+
+        mPlaybackStatus = new PlaybackStatus(this);
+
     }
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-        
+        updateBotomActionBarInfo();
     }
 
     @Override
@@ -120,18 +156,31 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.action_local:
+            case R.id.action_button_local:
                 mViewPager.setCurrentItem(LOCAL_MUSIC);
                 break;
-            case R.id.action_setting:
+            case R.id.action_button_setting:
                 mViewPager.setCurrentItem(SETTING);
                 break;
         }
     }
 
+    private void updateBotomActionBarInfo(){
+        mBABTrackName.setText(MusicUtils.getTrackName());
+        mBABAlbumInfo.setText(String.format(getString(R.string.divider_artist_album),
+                MusicUtils.getArtistName(),MusicUtils.getAlbumName()));
+        mBABPlayPauseButton.updateState();
+    }
+
     private void findViews(){
-        mActionBarLocalMusic = (TextView)mCustomActionBarView.findViewById(R.id.action_local);
-        mActionBarSetting = (TextView)mCustomActionBarView.findViewById(R.id.action_setting);
+        mActionBarLocalMusic = (TextView)mCustomActionBarView.findViewById(R.id.action_button_local);
+        mActionBarSetting = (TextView)mCustomActionBarView.findViewById(R.id.action_button_setting);
+
+        mBABTrackName = (TextView)findViewById(R.id.bottom_action_bar_line_one);
+        mBABAlbumInfo = (TextView)findViewById(R.id.bottom_action_bar_line_two);
+        mBABPlayPauseButton = (PlayPauseButton)findViewById(R.id.action_button_play);
+
+
     }
 
     private void setListener(){
@@ -149,4 +198,24 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
     }
 
 
+    private static final class PlaybackStatus extends BroadcastReceiver{
+
+        private final WeakReference<HomeActivity> mReference;
+
+        public PlaybackStatus(final HomeActivity activity) {
+            mReference = new WeakReference<HomeActivity>(activity);
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            final String action = intent.getAction();
+
+            if(action.equals(MusicPlaybackService.PLAYSTATE_CHANGED)){
+                mReference.get().mBABPlayPauseButton.updateState();
+            }else if(action.equals(MusicPlaybackService.META_CHANGED)){
+                mReference.get().updateBotomActionBarInfo();
+            }
+        }
+    }
 }

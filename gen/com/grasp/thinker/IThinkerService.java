@@ -116,6 +116,30 @@ reply.writeNoException();
 reply.writeInt(_result);
 return true;
 }
+case TRANSACTION_getArtistName:
+{
+data.enforceInterface(DESCRIPTOR);
+java.lang.String _result = this.getArtistName();
+reply.writeNoException();
+reply.writeString(_result);
+return true;
+}
+case TRANSACTION_getTrackName:
+{
+data.enforceInterface(DESCRIPTOR);
+java.lang.String _result = this.getTrackName();
+reply.writeNoException();
+reply.writeString(_result);
+return true;
+}
+case TRANSACTION_getAlbumName:
+{
+data.enforceInterface(DESCRIPTOR);
+java.lang.String _result = this.getAlbumName();
+reply.writeNoException();
+reply.writeString(_result);
+return true;
+}
 }
 return super.onTransact(code, data, reply, flags);
 }
@@ -272,6 +296,57 @@ _data.recycle();
 }
 return _result;
 }
+@Override public java.lang.String getArtistName() throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+java.lang.String _result;
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+mRemote.transact(Stub.TRANSACTION_getArtistName, _data, _reply, 0);
+_reply.readException();
+_result = _reply.readString();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+return _result;
+}
+@Override public java.lang.String getTrackName() throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+java.lang.String _result;
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+mRemote.transact(Stub.TRANSACTION_getTrackName, _data, _reply, 0);
+_reply.readException();
+_result = _reply.readString();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+return _result;
+}
+@Override public java.lang.String getAlbumName() throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+java.lang.String _result;
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+mRemote.transact(Stub.TRANSACTION_getAlbumName, _data, _reply, 0);
+_reply.readException();
+_result = _reply.readString();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+return _result;
+}
 }
 static final int TRANSACTION_openFile = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
 static final int TRANSACTION_open = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
@@ -282,6 +357,9 @@ static final int TRANSACTION_prev = (android.os.IBinder.FIRST_CALL_TRANSACTION +
 static final int TRANSACTION_isPlaying = (android.os.IBinder.FIRST_CALL_TRANSACTION + 6);
 static final int TRANSACTION_isInitialized = (android.os.IBinder.FIRST_CALL_TRANSACTION + 7);
 static final int TRANSACTION_getQueuePosition = (android.os.IBinder.FIRST_CALL_TRANSACTION + 8);
+static final int TRANSACTION_getArtistName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 9);
+static final int TRANSACTION_getTrackName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 10);
+static final int TRANSACTION_getAlbumName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 11);
 }
 public void openFile(java.lang.String path) throws android.os.RemoteException;
 public void open(long[] list, int position) throws android.os.RemoteException;
@@ -292,4 +370,7 @@ public void prev() throws android.os.RemoteException;
 public boolean isPlaying() throws android.os.RemoteException;
 public boolean isInitialized() throws android.os.RemoteException;
 public int getQueuePosition() throws android.os.RemoteException;
+public java.lang.String getArtistName() throws android.os.RemoteException;
+public java.lang.String getTrackName() throws android.os.RemoteException;
+public java.lang.String getAlbumName() throws android.os.RemoteException;
 }
