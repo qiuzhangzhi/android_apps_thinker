@@ -15,4 +15,9 @@
     <dimen name="item_padding_large">10dp</dimen>
     <dimen name="item_padding_nomal">8dp</dimen>
     <dimen name="item_padding_small">5dp</dimen>
+
+    <!-- notification -->
+    <dimen name="notification_action_height">48.0dip</dimen>
+    <dimen name="notification_action_width">48.0dip</dimen>
+    <dimen name="notification_action_padding">8.0dip</dimen>
 </resources>

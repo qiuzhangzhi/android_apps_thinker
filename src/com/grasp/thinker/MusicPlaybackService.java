@@ -1,8 +1,11 @@
 package com.grasp.thinker;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -16,6 +19,8 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.provider.MediaStore;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import java.io.IOException;
@@ -30,7 +35,11 @@ public class MusicPlaybackService extends Service {
 
     public static final String PLAYSTATE_CHANGED = "com.grasp.thinker.playstatechanged";
 
-    public static final String META_CHANGED = "com.andrew.apollo.metachanged";
+    public static final String META_CHANGED = "com.grasp.thinker.metachanged";
+
+    public static final String TOGGLEPAUSE_ACTION = "com.grasp.thinker.togglepause";
+
+    public static final String CMDNAME = "command";
 
     private boolean mIsSupposedToBePlaying = false;
 
@@ -57,6 +66,10 @@ public class MusicPlaybackService extends Service {
     private MusicPlayerHandler mPlayerHandler;
 
     private MultiPlayer mPlayer;
+
+    private NotificationHelper mNotificationHelper;
+
+    private TelephonyManager mTelephonyManager;
 
     private final IBinder mBinder = new ServiceStub(this);
 
@@ -87,12 +100,53 @@ public class MusicPlaybackService extends Service {
         mPlayer = new MultiPlayer(this);
         mPlayer.setHandler(mPlayerHandler);
 
+        final IntentFilter filter = new IntentFilter();
+        filter.addAction(TOGGLEPAUSE_ACTION);
+        registerReceiver(mIntentReceiver,filter);
+
+
+        mNotificationHelper = new NotificationHelper(this);
+        mTelephonyManager = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
+        mTelephonyManager.listen(mPhoneStateListener,PhoneStateListener.LISTEN_CALL_STATE);
+
     }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if(intent != null){
+            final String action = intent.getAction();
+            Log.d(TAG,"action:"+action);
+            if(TOGGLEPAUSE_ACTION.equals(action)){
+                if (isPlaying()) {
+                    pause();
+                } else {
+                    play();
+                }
+            }
+        }
+
+        return START_STICKY;
+
+    }
+
     /**
      * Stops playback.
      */
     public void stop() {
         stop(true);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        mPlayer.release();
+        mPlayer = null;
+
+        closeCursor();
+
+        // Unregister the mount listener
+        unregisterReceiver(mIntentReceiver);
     }
 
     /**
@@ -132,6 +186,7 @@ public class MusicPlaybackService extends Service {
 
             cancelShutdown();
             updateNotification();*/
+            updateNotification();
         } else if (mPlayListLen <= 0) {
            // setShuffleMode(SHUFFLE_AUTO);
         }
@@ -298,6 +353,7 @@ public class MusicPlaybackService extends Service {
     private void notifyChange(final String what){
         Intent intent = new Intent(what);
         sendBroadcast(intent);
+        mNotificationHelper.updatePlayState(isPlaying());
     }
 
     private void setNextTrack() {
@@ -317,6 +373,11 @@ public class MusicPlaybackService extends Service {
         }
     }
 
+
+    private void updateNotification(){
+        mNotificationHelper.buildNotification(getAlbumName(), getArtistName(),
+                getTrackName(), isPlaying());
+    }
     private void openCurrentAndNext(){
         openCurrentMaybeNext(true);
     }
@@ -379,7 +440,51 @@ public class MusicPlaybackService extends Service {
         }
     }
 
+    private PhoneStateListener mPhoneStateListener = new PhoneStateListener(){
 
+        boolean isBreakByPhone = false;
+        @Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+
+            switch (state){
+                case TelephonyManager.CALL_STATE_IDLE:
+                    if(isBreakByPhone){
+                        Log.d(TAG,"CALL_STATE_IDLE,breakByPhone"+isBreakByPhone);
+                        play();
+                        isBreakByPhone = false;
+
+                    }
+                    break;
+                case TelephonyManager.CALL_STATE_RINGING:
+                    if(isPlaying()){
+                        pause();
+                        isBreakByPhone = true;
+                        Log.d(TAG,"CALL_STATE_RINGING,breakByPhone"+isBreakByPhone);
+                    }
+                    break;
+            }
+
+        }
+    };
+
+    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+
+            final String action = intent.getAction();
+            Log.d(TAG,"action:"+action);
+            if(action.equals(TOGGLEPAUSE_ACTION)){
+                if (isPlaying()) {
+                    pause();
+                } else {
+                    play();
+                }
+            }
+        }
+    };
 
     private static final class MusicPlayerHandler extends Handler {
         private final WeakReference<MusicPlaybackService> mService;
@@ -415,6 +520,7 @@ public class MusicPlaybackService extends Service {
                     service.updateCursor(service.mPlayList[service.mPlayPos]);
                     service.setNextTrack();
                     service.notifyChange(META_CHANGED);
+                    service.updateNotification();
                     break;
         /*        case FADEDOWN:
                     mCurrentVolume -= .05f;

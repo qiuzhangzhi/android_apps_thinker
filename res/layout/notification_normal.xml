@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:id="@+id/notification_normal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_vertical"
+
+        >
+
+    <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="@dimen/item_padding_nomal"
+            android:orientation="vertical"
+            >
+        <TextView
+                android:id="@+id/notification_normal_line_one"
+                style="@style/NotificationText"
+                android:textAppearance="@android:style/TextAppearance.StatusBar.EventContent.Title"
+                />
+        <TextView
+                android:id="@+id/notification_normal_line_two"
+                style="@style/NotificationText"
+                android:textAppearance="@android:style/TextAppearance.StatusBar.EventContent"
+                />
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/notification_normal_play"
+        style="@style/NotificationAction.Play"
+        />
+
+
+</LinearLayout>
