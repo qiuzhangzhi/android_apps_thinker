@@ -8,6 +8,9 @@
     <string name="actionbar_music">音乐</string>
     <string name="actionbar_setting">设置</string>
 
-
+    <!-- Do not translate. Duration format for duration < 1 hour -->
+    <string name="durationformatshort" translatable="false">%2$d:%3$02d</string>
+    <!-- Do not translate. Duration format for duration >= 1 hour -->
+    <string name="durationformatlong" translatable="false">%1$d:%2$02d:%3$02d</string>
 
 </resources>

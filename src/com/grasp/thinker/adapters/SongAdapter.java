@@ -2,6 +2,7 @@ package com.grasp.thinker.adapters;
 
 import com.grasp.thinker.R;
 import com.grasp.thinker.model.Song;
+import com.grasp.thinker.utils.MusicUtils;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -50,7 +51,8 @@ public class SongAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_item_songlist_adpter,null);
             viewHolder.mSongName = (TextView)convertView.findViewById(R.id.song_name);
-            viewHolder.mSongInfo = (TextView)convertView.findViewById(R.id.song_info);
+            viewHolder.mSongInfo = (TextView)convertView.findViewById(R.id.artist_album);
+            viewHolder.mSongTime = (TextView)convertView.findViewById(R.id.song_time);
             convertView.setTag(viewHolder);
         }else {
             viewHolder = (ViewHolder)convertView.getTag();
@@ -59,6 +61,7 @@ public class SongAdapter extends BaseAdapter {
         if(song!=null){
             viewHolder.mSongName.setText(song.mSongName);
             viewHolder.mSongInfo.setText(String.format(mContext.getString(R.string.divider_artist_album),song.mArtistName,song.mAlbumName));
+            viewHolder.mSongTime.setText(""+ MusicUtils.makeTimeString(mContext,song.mDuration));
         }
         return convertView;
     }
@@ -70,5 +73,6 @@ public class SongAdapter extends BaseAdapter {
     static class ViewHolder{
         TextView mSongName;
         TextView mSongInfo;
+        TextView mSongTime;
     }
 }

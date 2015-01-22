@@ -2,6 +2,7 @@ package com.grasp.thinker.utils;
 
 import com.grasp.thinker.IThinkerService;
 import com.grasp.thinker.MusicPlaybackService;
+import com.grasp.thinker.R;
 import com.grasp.thinker.adapters.SongAdapter;
 import com.grasp.thinker.model.Song;
 
@@ -13,6 +14,9 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by qiuzhangzhi on 15/1/11.
@@ -203,5 +207,19 @@ public class MusicUtils {
             }
         }
         return list;
+    }
+
+
+    public static final String makeTimeString(final Context context, long secs) {
+        long hours, mins;
+
+        hours = secs / 3600;
+        secs -= hours * 3600;
+        mins = secs / 60;
+        secs -= mins * 60;
+
+        final String durationFormat = context.getResources().getString(
+                hours == 0 ? R.string.durationformatshort : R.string.durationformatlong);
+        return String.format(durationFormat, hours, mins, secs);
     }
 }

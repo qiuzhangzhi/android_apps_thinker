@@ -17,17 +17,38 @@
             android:textSize="@dimen/text_size_nomal"
             android:textColor="@color/black"
             />
-    <TextView
+    <LinearLayout
             android:id="@+id/song_info"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
+            android:orientation="horizontal"
             android:layout_below="@id/song_name"
-            android:layout_marginTop="@dimen/item_padding_nomal"
 
-            android:textSize="@dimen/text_size_small"
-            android:textColor="@color/darker_gray"
-            />
+            android:layout_marginTop="@dimen/item_padding_nomal"
+            >
+        <TextView
+                android:id="@+id/artist_album"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/darker_gray"
+                />
+        <TextView
+                android:id="@+id/song_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginLeft="5dp"
+
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/darker_gray"
+                />
+    </LinearLayout>
+
     <View
             android:layout_width="fill_parent"
             android:layout_height="1px"

@@ -446,22 +446,19 @@ public class MusicPlaybackService extends Service {
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
 
-            switch (state){
-                case TelephonyManager.CALL_STATE_IDLE:
-                    if(isBreakByPhone){
-                        Log.d(TAG,"CALL_STATE_IDLE,breakByPhone"+isBreakByPhone);
-                        play();
-                        isBreakByPhone = false;
+            if(state == TelephonyManager.CALL_STATE_IDLE){
+                if(isBreakByPhone){
+                    Log.d(TAG,"CALL_STATE_IDLE,breakByPhone"+isBreakByPhone);
+                    play();
+                    isBreakByPhone = false;
 
-                    }
-                    break;
-                case TelephonyManager.CALL_STATE_RINGING:
-                    if(isPlaying()){
-                        pause();
-                        isBreakByPhone = true;
-                        Log.d(TAG,"CALL_STATE_RINGING,breakByPhone"+isBreakByPhone);
-                    }
-                    break;
+                }
+            }else {
+                if(isPlaying()){
+                    pause();
+                    isBreakByPhone = true;
+                    Log.d(TAG,"CALL_STATE_RINGING,breakByPhone"+isBreakByPhone);
+                }
             }
 
         }

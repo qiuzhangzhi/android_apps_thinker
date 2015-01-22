@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
@@ -9,11 +9,23 @@
 
    <android.support.v4.view.ViewPager
            android:id="@+id/view_pager"
-           android:layout_width="fill_parent"
-           android:layout_height="0dp"
-           android:layout_weight="1"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
            android:background="@color/lighter_gray"
+           android:layout_marginBottom="@dimen/actionbar_bottom_height"
            />
 
-    <include layout="@layout/actionbar_bottom"/>
-</LinearLayout>
+
+    <include
+            android:id="@+id/actionbar_bottom"
+            layout="@layout/actionbar_bottom"
+            />
+
+    <include
+            android:id="@+id/colorstrip"
+            layout="@layout/colorstrip"
+            android:layout_width="fill_parent"
+            android:layout_height="5dp"
+            android:layout_above="@id/actionbar_bottom"
+            />
+</RelativeLayout>

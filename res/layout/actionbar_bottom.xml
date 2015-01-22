@@ -2,13 +2,13 @@
 <com.grasp.thinker.widgets.theme.BottomActionBar
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res/com.andrew.apollo"
         android:id="@+id/bottom_action_bar_parent"
         android:layout_width="match_parent"
         android:layout_height="@dimen/actionbar_bottom_height"
-        android:layout_gravity="bottom"
-        tools:ignore="ContentDescription" >
-
+        android:layout_alignParentBottom="true"
+        tools:ignore="ContentDescription"
+        android:background="@color/white"
+        >
 
 
     <LinearLayout
