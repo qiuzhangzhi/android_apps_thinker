@@ -9,6 +9,8 @@ interface IThinkerService{
     void play();
     void next();
     void prev();
+    long position();
+    void seek(long pos);
     boolean isPlaying();
     boolean isInitialized();
     int getQueuePosition();

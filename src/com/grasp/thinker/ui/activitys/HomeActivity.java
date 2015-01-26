@@ -87,6 +87,25 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         updateBotomActionBarInfo();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mToken != null) {
+            MusicUtils.unbindFromService(mToken);
+            mToken = null;
+        }
+
+        // Unregister the receiver
+        try {
+            unregisterReceiver(mPlaybackStatus);
+        } catch (final Throwable e) {
+            //$FALL-THROUGH$
+        }
+
+        // Remove any music status listeners
+     //   mMusicStateListener.clear();
+    }
+
     private void init(){
 
         mCustomActionBarView = LayoutInflater.from(HomeActivity.this).inflate(R.layout.actionbar_custom,null);
@@ -110,7 +129,7 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
 
 
         // Control the media volume
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+      //  setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         // Bind Thinker's service
         mToken = MusicUtils.bindToService(this, this);

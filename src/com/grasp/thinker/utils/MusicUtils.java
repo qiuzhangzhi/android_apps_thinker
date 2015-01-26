@@ -17,6 +17,7 @@ import android.os.RemoteException;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.WeakHashMap;
 
 /**
  * Created by qiuzhangzhi on 15/1/11.
@@ -26,6 +27,12 @@ public class MusicUtils {
     public static IThinkerService mService = null;
 
     private static final long[] sEmptyList = null;
+
+    private static final WeakHashMap<Context , ServiceBinder> mConnectionMap;
+
+    static {
+        mConnectionMap = new WeakHashMap<Context, ServiceBinder>();
+    }
 
     public static final ServiceToken bindToService(final Context context,
             final ServiceConnection callback) {
@@ -40,10 +47,25 @@ public class MusicUtils {
         final ServiceBinder binder = new ServiceBinder(callback);
         if (contextWrapper.bindService(
                 new Intent().setClass(contextWrapper, MusicPlaybackService.class), binder, 0)) {
-           // mConnectionMap.put(contextWrapper, binder);
+            mConnectionMap.put(contextWrapper, binder);
             return new ServiceToken(contextWrapper);
         }
         return null;
+    }
+
+    public static void unbindFromService(final ServiceToken token) {
+        if (token == null) {
+            return;
+        }
+        final ContextWrapper mContextWrapper = token.mWrappedContext;
+        final ServiceBinder mBinder = mConnectionMap.remove(mContextWrapper);
+        if (mBinder == null) {
+            return;
+        }
+        mContextWrapper.unbindService(mBinder);
+        if (mConnectionMap.isEmpty()) {
+            mService = null;
+        }
     }
 
     public static final class ServiceBinder implements ServiceConnection {
@@ -84,6 +106,7 @@ public class MusicUtils {
         }
     }
 
+
     /**
      * Plays or pauses the music.
      */
@@ -99,6 +122,7 @@ public class MusicUtils {
         } catch (final Exception ignored) {
         }
     }
+
     public static final boolean isPlaying() {
         if (mService != null) {
             try {
@@ -144,6 +168,7 @@ public class MusicUtils {
         }
         return null;
     }
+
     /**
      * @param context The {@link Context} to use.
      * @param list The list of songs to play.
@@ -156,24 +181,7 @@ public class MusicUtils {
             return;
         }
         try {
-         /*   if (forceShuffle) {
-                mService.setShuffleMode(MusicPlaybackService.SHUFFLE_NORMAL);
-            } else {
-                mService.setShuffleMode(MusicPlaybackService.SHUFFLE_NONE);
-            }*/
-   /*         final long currentId = mService.getAudioId();
-            final int currentQueuePosition = getQueuePosition();
-            if (position != -1 && currentQueuePosition == position && currentId == list[position]) {
-                final long[] playlist = getQueue();
-                if (Arrays.equals(list, playlist)) {
-                    mService.play();
-                    return;
-                }
-            }
-            if (position < 0) {
-                position = 0;
-            }*/
-            if(position == mService.getQueuePosition() && mService.isInitialized()){
+            if(position == mService.getQueuePosition()){
                    playOrPause();
             }else{
                 mService.open(list,position);
@@ -181,7 +189,9 @@ public class MusicUtils {
             }
 
         } catch (final RemoteException ignored) {
-        }}
+        }
+    }
+
     public static void playAllFromUserItemClick(final Context context,
             SongAdapter adapter, final int position) {
 
