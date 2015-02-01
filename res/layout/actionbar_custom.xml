@@ -13,12 +13,12 @@
 
         android:layout_alignParentLeft="true"
         android:gravity="center"
-        android:paddingLeft="@dimen/actionbar_button_padding"
+        android:paddingLeft="@dimen/item_padding_nomal"
         android:paddingRight="@dimen/actionbar_button_padding"
 
         android:textColor="@color/white"
         android:text="@string/actionbar_music"
-        android:background="@color/actionbar_pressed_background"
+        android:textSize="@dimen/text_size_large"
         />
 <TextView
         android:id="@+id/action_button_setting"
@@ -33,6 +33,8 @@
         android:textColor="@color/white"
         android:text="@string/actionbar_setting"
         android:background="@color/transparent"
+
+        android:visibility="gone"
         />
 
 </RelativeLayout>

@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="?android:attr/actionBarSize"
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#00ff00"
-        >
+            android:paddingLeft="@dimen/actionbar_button_padding"
+            android:paddingRight="@dimen/actionbar_button_padding"
+            android:id="@+id/action_filter"
 
-</LinearLayout>
+            android:layout_gravity="center"
+            android:src="@drawable/lay_actionbar_setting"
+            android:background="@drawable/selector_actionbar_button"
+            />

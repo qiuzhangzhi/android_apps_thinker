@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources >
 
-    <style name="ThinkerStyle" parent="@android:style/Theme.Holo.Light">
+    <style name="ThinkerTheme" parent="@android:style/Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/ThinkerActionBarStyle</item>
+        <item name="android:actionBarItemBackground">@drawable/selector_actionbar_button</item>
+
     </style>
 
     <style name="ThinkerActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:background">@color/thinker_basic_color</item>
+
     </style>
 
     <style name="BottomActionBarText">
@@ -19,9 +22,8 @@
     </style>
 
     <style name="BottomActionBarItem">
-        <item name="android:layout_weight">1</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center|right</item>
         <item name="android:scaleType">centerCrop</item>
     </style>

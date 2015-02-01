@@ -10,9 +10,9 @@ import android.support.v4.app.Fragment;
  */
 public enum EnumFragment {
 
-    PLAYLIST(PlaylistFragment.class),
+    PLAYLIST(PlaylistFragment.class);
 
-    SETTING(SettingFragment.class);
+   // SETTING(SettingFragment.class);
 
     private Class<? extends Fragment> mFragmentClass;
 

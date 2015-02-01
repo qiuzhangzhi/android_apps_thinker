@@ -22,7 +22,10 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
@@ -157,12 +160,12 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
     public void onPageSelected(int i) {
         switch (i){
             case LOCAL_MUSIC:
-                mActionBarLocalMusic.setBackgroundResource(R.color.actionbar_pressed_background);
-                mActionBarSetting.setBackgroundResource(R.color.transparent);
+              //  mActionBarLocalMusic.setBackgroundResource(R.color.actionbar_pressed_background);
+                //mActionBarSetting.setBackgroundResource(R.color.transparent);
                 break;
             case SETTING:
-                mActionBarSetting.setBackgroundResource(R.color.actionbar_pressed_background);
-                mActionBarLocalMusic.setBackgroundResource(R.color.transparent);
+               // mActionBarSetting.setBackgroundResource(R.color.actionbar_pressed_background);
+               // mActionBarLocalMusic.setBackgroundResource(R.color.transparent);
                 break;
         }
     }
@@ -212,11 +215,39 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
     public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuInflater inflater = getMenuInflater();
-
+        inflater.inflate(R.menu.activity_home_actions,menu);
+     /*   MenuItem searchItem = menu.findItem(R.id.action_setting);
+        ImageView searchView = (ImageView) searchItem.getActionView();
+        searchView.setBackgroundResource(R.drawable.selector_actionbar_button);
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopup(v);
+            }
+        });*/
         return super.onCreateOptionsMenu(menu);
     }
 
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_setting:
+
+
+                return false;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+   private void showPopup(View view){
+
+       PopupMenu popupMenu = new PopupMenu(this,view);
+       MenuInflater inflater = popupMenu.getMenuInflater();
+       inflater.inflate(R.menu.actionbar_settings, popupMenu.getMenu());
+       popupMenu.show();
+   }
     private static final class PlaybackStatus extends BroadcastReceiver{
 
         private final WeakReference<HomeActivity> mReference;

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item  android:top="0dp" android:bottom="14dp">
+        <shape
+               android:innerRadius="0dp"
+               android:shape="ring"
+               android:useLevel="false" >
+            <solid android:color="@color/white" />
+            <size
+                    android:height="@dimen/actionbar_button_padding"
+                    android:width="@dimen/actionbar_button_padding" />
+        </shape>
+    </item>
+
+
+    <item  android:top="0dp">
+        <shape
+                android:innerRadius="0dp"
+                android:shape="ring"
+                android:useLevel="false" >
+            <solid android:color="@color/white" />
+            <size
+                    android:height="@dimen/actionbar_button_padding"
+                    android:width="@dimen/actionbar_button_padding" />
+        </shape>
+    </item>
+
+
+    <item  android:top="14dp">
+        <shape
+                android:innerRadius="0dp"
+                android:shape="ring"
+                android:useLevel="false" >
+            <solid android:color="@color/white" />
+            <size
+                    android:height="@dimen/actionbar_button_padding"
+                    android:width="@dimen/actionbar_button_padding" />
+        </shape>
+    </item>
+</layer-list>

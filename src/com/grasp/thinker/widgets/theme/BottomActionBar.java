@@ -12,8 +12,12 @@
 package com.grasp.thinker.widgets.theme;
 
 
+import com.grasp.thinker.R;
+import com.grasp.thinker.utils.ThemeUtils;
+
 import android.content.Context;
 import android.util.AttributeSet;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 /**
@@ -34,8 +38,8 @@ public class BottomActionBar extends RelativeLayout {
      */
     public BottomActionBar(final Context context, final AttributeSet attrs) {
         super(context, attrs);
-       /* // Initialze the theme resources
-        final ThemeUtils resources = new ThemeUtils(context);
+        // Initialze the theme resources
+      /*  final ThemeUtils resources = new ThemeUtils(context);
         // Theme the bottom action bar
         setBackgroundDrawable(resources.getDrawable(BOTTOM_ACTION_BAR));*/
     }
@@ -47,7 +51,7 @@ public class BottomActionBar extends RelativeLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         // Theme the selector
-        /*final LinearLayout bottomActionBar = (LinearLayout)findViewById(R.id.bottom_action_bar);
+     /*   final LinearLayout bottomActionBar = (LinearLayout)findViewById(R.id.bottom_action_bar);
         bottomActionBar.setBackgroundDrawable(new HoloSelector(getContext()));*/
     }
 }

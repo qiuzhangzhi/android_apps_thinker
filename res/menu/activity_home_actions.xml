@@ -2,13 +2,12 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/action_search"
-          android:icon="@drawable/ic_launcher"
-          android:title="@string/app_name"
-          android:showAsAction="ifRoom|withText"
+    <item android:id="@+id/action_setting"
+          android:title="@string/actionbar_setting"
+          android:showAsAction="always"
+          android:icon="@drawable/lay_actionbar_setting"
+          android:actionProviderClass="com.grasp.thinker.widgets.SettingActionProvider"
             />
-    <item android:id="@+id/action_compose"
-          android:icon="@drawable/icon"
-          android:title="yuyu"
-           />
+
+
 </menu>

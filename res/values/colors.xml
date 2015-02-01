@@ -7,11 +7,12 @@
     <color name="darker_gray">#aaa</color>
     <color name="gray">#c9c9c9</color>
     <color name="lighter_gray">#eeeeee</color>
+    <color name="lighter_gray_x">#ffffee</color>
     <color name="white">#ffffff</color>
     <color name="black">#ff000000</color>
 
     <!-- actionbar -->
     <color name="actionbar_pressed_background">#30000000</color>
 
-    <color name="actionbar_bottom_background">#33ffffff</color>
+    <color name="actionbar_bottom_background">@color/white</color>
 </resources>

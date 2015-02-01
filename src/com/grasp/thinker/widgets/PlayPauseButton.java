@@ -31,9 +31,9 @@ public class PlayPauseButton extends ImageButton implements View.OnClickListener
     public void updateState(){
 
         if(MusicUtils.isPlaying()){
-            setImageResource(R.drawable.player_pause_gray);
+            setImageResource(R.drawable.player_pause);
         }else{
-            setImageResource(R.drawable.player_play_gray);
+            setImageResource(R.drawable.player_play);
         }
     }
 }
