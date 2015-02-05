@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--text size-->
+    <dimen name="text_size_xlarge">18dp</dimen>
+
     <dimen name="text_size_large">16dp</dimen>
 
     <dimen name="text_size_nomal">14sp</dimen>
@@ -16,6 +18,7 @@
     <dimen name="item_padding_nomal">8dp</dimen>
     <dimen name="item_padding_small">5dp</dimen>
 
+    <dimen name="ico_size_nomal">20dp</dimen>
     <!-- notification -->
     <dimen name="notification_action_height">48.0dip</dimen>
     <dimen name="notification_action_width">48.0dip</dimen>

@@ -169,6 +169,16 @@ public class MusicUtils {
         return null;
     }
 
+    public static final void refresh(SongAdapter adapter){
+        try {
+            if (mService != null) {
+                final long[] list = MusicUtils.getSongListForAdapter(adapter);
+                mService.refresh(list);
+            }
+        } catch (final RemoteException ignored) {
+        }
+
+    }
     /**
      * @param context The {@link Context} to use.
      * @param list The list of songs to play.

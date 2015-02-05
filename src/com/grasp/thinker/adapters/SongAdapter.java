@@ -67,9 +67,11 @@ public class SongAdapter extends BaseAdapter {
     }
 
     public void updatData(List<Song> data){
+        mData.clear();
         mData.addAll(data);
         notifyDataSetChanged();
     }
+
     static class ViewHolder{
         TextView mSongName;
         TextView mSongInfo;

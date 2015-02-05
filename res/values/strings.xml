@@ -9,6 +9,11 @@
     <string name="actionbar_setting">设置</string>
     <string name="actionbar_setting_filter">过滤歌曲</string>
 
+
+    <string name="dialog_filter_title">过滤类型</string>
+    <string name="dialog_filter_num">数字</string>
+    <string name="dialog_filter_letter">字母</string>
+
     <!-- Do not translate. Duration format for duration < 1 hour -->
     <string name="durationformatshort" translatable="false">%2$d:%3$02d</string>
     <!-- Do not translate. Duration format for duration >= 1 hour -->

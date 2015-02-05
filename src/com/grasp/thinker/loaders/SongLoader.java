@@ -1,6 +1,7 @@
 package com.grasp.thinker.loaders;
 
 import com.grasp.thinker.model.Song;
+import com.grasp.thinker.utils.PreferenceUtils;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -10,6 +11,7 @@ import android.provider.MediaStore.Audio;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by qiuzhangzhi on 15/1/10.
@@ -18,9 +20,12 @@ public class SongLoader extends WrappedAsyncTaskLoader<List<Song>> {
 
     private final ArrayList<Song> mSongList = new ArrayList<Song>();
 
+    private static PreferenceUtils mPreferenceUtils;
+
     private Cursor mCursor;
     public SongLoader(final Context context){
         super(context);
+        mPreferenceUtils = PreferenceUtils.getsInstance(context);
     }
 
     @Override
@@ -49,11 +54,23 @@ public class SongLoader extends WrappedAsyncTaskLoader<List<Song>> {
     }
 
     public final static Cursor getSongCursor(final Context context){
+
+        Set<String> filters = mPreferenceUtils.getSongFilter();
+
         final StringBuilder mSelectionClause = new StringBuilder();
         mSelectionClause.append(Audio.AudioColumns.IS_MUSIC + "= 1 ");
         mSelectionClause.append("AND "+ Audio.AudioColumns.TITLE + " !='' ");
-        mSelectionClause.append("AND "+ Audio.AudioColumns.TITLE + " NOT GLOB '[0-9]*' ");
-        mSelectionClause.append("AND "+ Audio.AudioColumns.TITLE + " NOT GLOB '通话*' ");
+
+        if(mPreferenceUtils.getIsFilterNum()){
+            mSelectionClause.append("AND "+ Audio.AudioColumns.TITLE + " NOT GLOB '[0-9]*' ");
+        }
+        if(mPreferenceUtils.getIsFilterLetter()){
+            mSelectionClause.append("AND "+ Audio.AudioColumns.TITLE + " NOT GLOB '[a-z]*' ");
+        }
+        for (String filter : filters){
+            mSelectionClause.append("AND "+ Audio.AudioColumns.TITLE + " NOT GLOB '" + filter +"*' ");
+        }
+
         return context.getContentResolver().query(
 
                 Audio.Media.EXTERNAL_CONTENT_URI,

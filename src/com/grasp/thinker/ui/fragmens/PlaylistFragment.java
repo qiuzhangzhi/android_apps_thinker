@@ -24,7 +24,7 @@ import java.util.List;
 public class PlaylistFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Song>>
 ,AdapterView.OnItemClickListener{
 
-    private final static int SONG_LOADER = 0;
+    public final static int SONG_LOADER = 0;
 
     private View mRootView;
 
@@ -58,19 +58,25 @@ public class PlaylistFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getLoaderManager().restartLoader(SONG_LOADER, null, this);
+    }
+
+    @Override
     public Loader<List<Song>> onCreateLoader(int i, Bundle bundle) {
         return new SongLoader(getActivity());
     }
 
     @Override
     public void onLoadFinished(Loader<List<Song>> loader, List<Song> songs) {
+            mSongAdapter.updatData(songs);
+            MusicUtils.refresh(mSongAdapter);
 
-        mSongAdapter.updatData(songs);
     }
 
     @Override
     public void onLoaderReset(Loader<List<Song>> loader) {
-
     }
 
     @Override

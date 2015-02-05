@@ -70,6 +70,8 @@ public class MusicPlaybackService extends Service {
 
     public static final String TOGGLEPAUSE_ACTION = "com.grasp.thinker.togglepause";
 
+    public static final String REFRESH = "com.grasp.thinker.refresh";
+
     public static final String CMDNAME = "command";
 
     public static final String CMDTOGGLEPAUSE = "togglepause";
@@ -88,6 +90,7 @@ public class MusicPlaybackService extends Service {
 
     private static final int TRACK_WENT_TO_NEXT = 2;
 
+    private static final int TRACK_ENDED = 1;
 
     private static final int IDCOLIDX = 0;
 
@@ -398,6 +401,13 @@ public class MusicPlaybackService extends Service {
         }
         return -1;
     }
+
+    private void refresh(long[] list){
+        mPlayList = list;
+        mPlayListLen = mPlayList.length;
+        mPlayer.setNextDataSource(null);
+    }
+
     private boolean isInitialized(){
         synchronized (this){
             return mPlayer.isInitialized();
@@ -635,6 +645,9 @@ public class MusicPlaybackService extends Service {
                     service.setNextTrack();
                     service.notifyChange(META_CHANGED);
                     service.updateNotification();
+                    break;
+                case TRACK_ENDED:
+                    service.gotoNext(false);
                     break;
         /*        case FADEDOWN:
                     mCurrentVolume -= .05f;
@@ -948,9 +961,7 @@ public class MusicPlaybackService extends Service {
                 mNextMediaPlayer = null;
                 mHandler.sendEmptyMessage(TRACK_WENT_TO_NEXT);
             } else {
-               /* mService.get().mWakeLock.acquire(30000);
                 mHandler.sendEmptyMessage(TRACK_ENDED);
-                mHandler.sendEmptyMessage(RELEASE_WAKELOCK);*/
             }
         }
     }
@@ -1035,6 +1046,11 @@ public class MusicPlaybackService extends Service {
         }
 
         @Override
+        public void refresh(long[] list) throws RemoteException {
+            mService.get().refresh(list);
+        }
+
+        @Override
         public boolean isInitialized() throws RemoteException {
             return mService.get().isInitialized();
         }
@@ -1043,6 +1059,8 @@ public class MusicPlaybackService extends Service {
         public int getQueuePosition() throws RemoteException {
             return mService.get().getQueuePosition();
         }
+
+
 
         @Override
         public String getTrackName() throws RemoteException {

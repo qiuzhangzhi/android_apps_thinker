@@ -133,6 +133,15 @@ reply.writeNoException();
 reply.writeInt(_result);
 return true;
 }
+case TRANSACTION_refresh:
+{
+data.enforceInterface(DESCRIPTOR);
+long[] _arg0;
+_arg0 = data.createLongArray();
+this.refresh(_arg0);
+reply.writeNoException();
+return true;
+}
 case TRANSACTION_getArtistName:
 {
 data.enforceInterface(DESCRIPTOR);
@@ -345,6 +354,21 @@ _data.recycle();
 }
 return _result;
 }
+@Override public void refresh(long[] list) throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+_data.writeLongArray(list);
+mRemote.transact(Stub.TRANSACTION_refresh, _data, _reply, 0);
+_reply.readException();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+}
 @Override public java.lang.String getArtistName() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
@@ -408,9 +432,10 @@ static final int TRANSACTION_seek = (android.os.IBinder.FIRST_CALL_TRANSACTION +
 static final int TRANSACTION_isPlaying = (android.os.IBinder.FIRST_CALL_TRANSACTION + 8);
 static final int TRANSACTION_isInitialized = (android.os.IBinder.FIRST_CALL_TRANSACTION + 9);
 static final int TRANSACTION_getQueuePosition = (android.os.IBinder.FIRST_CALL_TRANSACTION + 10);
-static final int TRANSACTION_getArtistName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 11);
-static final int TRANSACTION_getTrackName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 12);
-static final int TRANSACTION_getAlbumName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 13);
+static final int TRANSACTION_refresh = (android.os.IBinder.FIRST_CALL_TRANSACTION + 11);
+static final int TRANSACTION_getArtistName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 12);
+static final int TRANSACTION_getTrackName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 13);
+static final int TRANSACTION_getAlbumName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 14);
 }
 public void openFile(java.lang.String path) throws android.os.RemoteException;
 public void open(long[] list, int position) throws android.os.RemoteException;
@@ -423,6 +448,7 @@ public void seek(long pos) throws android.os.RemoteException;
 public boolean isPlaying() throws android.os.RemoteException;
 public boolean isInitialized() throws android.os.RemoteException;
 public int getQueuePosition() throws android.os.RemoteException;
+public void refresh(long[] list) throws android.os.RemoteException;
 public java.lang.String getArtistName() throws android.os.RemoteException;
 public java.lang.String getTrackName() throws android.os.RemoteException;
 public java.lang.String getAlbumName() throws android.os.RemoteException;

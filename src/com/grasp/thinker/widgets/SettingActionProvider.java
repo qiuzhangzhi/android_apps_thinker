@@ -1,17 +1,21 @@
 package com.grasp.thinker.widgets;
 
 import com.grasp.thinker.R;
+import com.grasp.thinker.ui.activitys.DialogFilterActivity;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
 import android.view.ActionProvider;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 
 /**
  * Created by qiuzhangzhi on 15/2/1.
@@ -46,6 +50,7 @@ public class SettingActionProvider extends ActionProvider {
                 .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
+                        showDialog();
                         return true;
                     }
                 });
@@ -54,5 +59,10 @@ public class SettingActionProvider extends ActionProvider {
     @Override
     public boolean hasSubMenu() {
         return true;
+    }
+
+    private void showDialog(){
+        Intent intent = new Intent(mContext, DialogFilterActivity.class);
+        mContext.startActivity(intent);
     }
 }

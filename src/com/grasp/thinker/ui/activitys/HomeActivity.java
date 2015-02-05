@@ -81,7 +81,7 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         final IntentFilter filter = new IntentFilter();
         filter.addAction(MusicPlaybackService.META_CHANGED);
         filter.addAction(MusicPlaybackService.PLAYSTATE_CHANGED);
-        registerReceiver(mPlaybackStatus,filter);
+        registerReceiver(mPlaybackStatus, filter);
     }
 
     @Override

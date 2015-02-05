@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingRight="@dimen/item_padding_large"
+
+        >
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/item_padding_large"
+            android:paddingBottom="@dimen/item_padding_large"
+            android:gravity="center_vertical"
+            >
+
+
+        <TextView
+                android:id="@+id/filter_num"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+
+                android:textSize="@dimen/text_size_nomal"
+                android:text="@string/dialog_filter_num"
+                />
+        <ImageView
+                android:id="@+id/filter_num_editer"
+                android:layout_width="@dimen/ico_size_nomal"
+                android:layout_height="@dimen/ico_size_nomal"
+                android:src="@drawable/dialog_filter_remove_ic"
+                />
+    </LinearLayout>
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray"
+            />
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/item_padding_large"
+            android:paddingBottom="@dimen/item_padding_large"
+            android:gravity="center_vertical"
+            >
+
+
+        <TextView
+                android:id="@+id/filter_letter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+
+                android:text="@string/dialog_filter_letter"
+                android:textSize="@dimen/text_size_nomal"
+                />
+        <ImageView
+                android:id="@+id/filter_letter_editer"
+                android:layout_width="@dimen/ico_size_nomal"
+                android:layout_height="@dimen/ico_size_nomal"
+                android:src="@drawable/dialog_filter_remove_ic"
+                />
+    </LinearLayout>
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray"
+            />
+</LinearLayout>
