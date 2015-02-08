@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:paddingTop="@dimen/item_padding_large"
+              android:paddingBottom="@dimen/item_padding_large"
+              android:background="@color/white"
+        >
+
+    <TextView
+            android:id="@+id/popup_song_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:layout_gravity="center_horizontal"
+            />
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+        <TextView
+                android:id="@+id/popup_song_time_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        <com.grasp.thinker.widgets.theme.ThemeableSeekBar
+                android:id="@+id/progress"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="1"
+                android:thumb="@null"
+                android:max="1000"
+                />
+        <TextView
+                android:id="@+id/popup_song_time_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            >
+
+        <com.grasp.thinker.widgets.RepeatingImageButton
+                android:id="@+id/popup_button_previous"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+        <com.grasp.thinker.widgets.PlayPauseButton
+                android:id="@+id/popup_button_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_large"
+
+                />
+        <com.grasp.thinker.widgets.RepeatingImageButton
+                android:id="@+id/popup_button_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/padding_large"
+                />
+    </LinearLayout>
+
+</LinearLayout>

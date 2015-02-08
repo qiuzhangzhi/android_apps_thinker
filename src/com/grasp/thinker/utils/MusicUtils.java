@@ -133,6 +133,44 @@ public class MusicUtils {
         return false;
     }
 
+    public static final long position() {
+        if (mService != null) {
+            try {
+                return mService.position();
+            } catch (final RemoteException ignored) {
+            }
+        }
+        return 0;
+    }
+
+    public static final long duration() {
+        if (mService != null) {
+            try {
+                return mService.duration();
+            } catch (final RemoteException ignored) {
+            }
+        }
+        return 0;
+    }
+
+    public static void next() {
+        try {
+            if (mService != null) {
+                mService.next();
+            }
+        } catch (final RemoteException ignored) {
+        }
+    }
+
+    public static void previous(){
+        try {
+            if (mService != null) {
+                mService.prev();
+            }
+        } catch (final RemoteException ignored) {
+        }
+    }
+
     public static final String getTrackName() {
         if (mService != null) {
             try {

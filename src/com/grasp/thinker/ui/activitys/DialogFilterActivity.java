@@ -129,6 +129,7 @@ public class DialogFilterActivity extends Activity implements View.OnClickListen
                 if(!ThinkerUtils.isStringEmpty(mEditTextAdd.getText().toString())){
                     mPreferenceUtils.setSongFilters(mEditTextAdd.getText().toString());
                     mFilterAdapter.addItem(mEditTextAdd.getText().toString());
+                    mEditTextAdd.setText("");
                 }
                 break;
 

@@ -388,6 +388,12 @@ public class MusicPlaybackService extends Service {
         return -1;
     }
 
+    private long duration(){
+        if (mPlayer.isInitialized()) {
+            return mPlayer.duration();
+        }
+        return -1;
+    }
     private long seek(long position){
         if (mPlayer.isInitialized()) {
             if (position < 0) {
@@ -1038,6 +1044,11 @@ public class MusicPlaybackService extends Service {
         @Override
         public long position() throws RemoteException {
             return mService.get().position();
+        }
+
+        @Override
+        public long duration() throws RemoteException {
+            return mService.get().duration();
         }
 
         @Override

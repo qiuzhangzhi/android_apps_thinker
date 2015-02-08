@@ -67,9 +67,12 @@ public class SongLoader extends WrappedAsyncTaskLoader<List<Song>> {
         if(mPreferenceUtils.getIsFilterLetter()){
             mSelectionClause.append("AND "+ Audio.AudioColumns.TITLE + " NOT GLOB '[a-z]*' ");
         }
-        for (String filter : filters){
-            mSelectionClause.append("AND "+ Audio.AudioColumns.TITLE + " NOT GLOB '" + filter +"*' ");
+        if(filters!=null){
+            for (String filter : filters){
+                mSelectionClause.append("AND "+ Audio.AudioColumns.TITLE + " NOT GLOB '" + filter +"*' ");
+            }
         }
+
 
         return context.getContentResolver().query(
 

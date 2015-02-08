@@ -49,4 +49,9 @@
     <style name="NotificationAction.Play" parent="@style/NotificationAction">
         <item name="android:src">@drawable/player_play_white</item>
     </style>
+
+    <style name="PopupAnimation">
+        <item name="android:windowEnterAnimation">@anim/popup_bottom_enter</item>
+        <item name="android:windowExitAnimation">@anim/popup_bottom_exit</item>
+    </style>
 </resources>

@@ -10,6 +10,7 @@ interface IThinkerService{
     void next();
     void prev();
     long position();
+    long duration();
     void seek(long pos);
     boolean isPlaying();
     boolean isInitialized();

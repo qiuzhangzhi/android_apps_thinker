@@ -5,7 +5,9 @@ import com.grasp.thinker.R;
 import com.grasp.thinker.adapters.PageAdapter;
 import com.grasp.thinker.ui.EnumFragment;
 import com.grasp.thinker.utils.MusicUtils;
+import com.grasp.thinker.utils.ThinkerUtils;
 import com.grasp.thinker.widgets.PlayPauseButton;
+import com.grasp.thinker.widgets.theme.ThemeableSeekBar;
 
 import android.app.ActionBar;
 import android.content.BroadcastReceiver;
@@ -14,18 +16,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.media.AudioManager;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.PopupMenu;
+import android.view.ViewGroup;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
@@ -36,9 +42,15 @@ import java.lang.ref.WeakReference;
 public class HomeActivity extends FragmentActivity implements ViewPager.OnPageChangeListener,View.OnClickListener,
         ServiceConnection{
 
+    private final static String TAG = "HomeActivity";
+
     private final static int LOCAL_MUSIC = 0;
 
     private final static int SETTING = 1;
+
+    private static final int REFRESH_TIME = 1;
+
+    private TimeHandler mTimeHandler;
 
     private PlaybackStatus mPlaybackStatus;
 
@@ -55,11 +67,27 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
     private TextView mActionBarSetting;
 
     //底部 actionbar
+    private View mBABContent;
+
     private TextView mBABTrackName;
 
     private TextView mBABAlbumInfo;
 
     private PlayPauseButton mBABPlayPauseButton;
+
+    private PopupWindow mPlayBackPopupWindow;
+
+    private View mPopupWindowContent;
+
+    private TextView mPopupSongInfo;
+
+    private TextView mPopupTimeProgress;
+
+    private TextView mPopupTimeDuration;
+
+    private ThemeableSeekBar mSeekBar;
+
+    private PlayPauseButton mPopupPlayPauseButton;
 
     private MusicUtils.ServiceToken mToken;
 
@@ -70,6 +98,7 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
 
         init();
         findViews();
+        initPupUpWindow();
         setListener();
 
     }
@@ -82,12 +111,26 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         filter.addAction(MusicPlaybackService.META_CHANGED);
         filter.addAction(MusicPlaybackService.PLAYSTATE_CHANGED);
         registerReceiver(mPlaybackStatus, filter);
+
+        final long next = refreshCurrentTime();
+
+        queueNextRefresh(next);
     }
+
 
     @Override
     protected void onResume() {
         super.onResume();
         updateBotomActionBarInfo();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if(mPlayBackPopupWindow.isShowing()){
+            mPlayBackPopupWindow.dismiss();
+        }
     }
 
     @Override
@@ -112,6 +155,7 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
     private void init(){
 
         mCustomActionBarView = LayoutInflater.from(HomeActivity.this).inflate(R.layout.actionbar_custom,null);
+
 
         mViewPager = (ViewPager)findViewById(R.id.view_pager);
         mPageAdapter = new PageAdapter(this);
@@ -138,12 +182,28 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         mToken = MusicUtils.bindToService(this, this);
 
         mPlaybackStatus = new PlaybackStatus(this);
+        mTimeHandler = new TimeHandler(this);
 
     }
+    private void initPupUpWindow(){
+        mPopupWindowContent = LayoutInflater.from(this).inflate(R.layout.popup_playback,null);
+        mPopupSongInfo = (TextView)mPopupWindowContent.findViewById(R.id.popup_song_info);
+        mPopupTimeProgress = (TextView)mPopupWindowContent.findViewById(R.id.popup_song_time_progress);
+        mPopupTimeDuration = (TextView)mPopupWindowContent.findViewById(R.id.popup_song_time_duration);
+        mSeekBar = (ThemeableSeekBar)mPopupWindowContent.findViewById(R.id.progress);
+        mPopupPlayPauseButton = (PlayPauseButton)mPopupWindowContent.findViewById(R.id.popup_button_play);
 
+        mPlayBackPopupWindow = new PopupWindow(mPopupWindowContent, ViewGroup.LayoutParams.MATCH_PARENT,
+                ThinkerUtils.dp2px(this,100),true);
+        mPlayBackPopupWindow.setOutsideTouchable(true);
+        mPlayBackPopupWindow.setBackgroundDrawable(new ColorDrawable(R.color.white));
+        mPlayBackPopupWindow.setAnimationStyle(R.style.PopupAnimation);
+
+    }
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
         updateBotomActionBarInfo();
+        updateBottomPopupInfo();
     }
 
     @Override
@@ -184,6 +244,9 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
             case R.id.action_button_setting:
                 mViewPager.setCurrentItem(SETTING);
                 break;
+            case R.id.actionbar_bottom:
+                mPlayBackPopupWindow.showAtLocation(mBABContent, Gravity.BOTTOM,0,0);
+                break;
         }
     }
 
@@ -194,6 +257,61 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         mBABPlayPauseButton.updateState();
     }
 
+    private void updateBottomPopupInfo(){
+        mPopupSongInfo.setText(String.format(getString(R.string.divider_artist_album),MusicUtils.getTrackName(),MusicUtils.getArtistName()));
+        mPopupTimeDuration.setText(MusicUtils.makeTimeString(this, MusicUtils.duration()/1000));
+        mPopupPlayPauseButton.updateState();
+    }
+
+    private void refreshCurrentTimeText(final long pos){
+        mPopupTimeProgress.setText(MusicUtils.makeTimeString(this, pos/1000));
+    }
+    private long refreshCurrentTime(){
+
+      final long pos = MusicUtils.position();
+
+        if(pos >= 0 && MusicUtils.duration() > 0){
+            refreshCurrentTimeText(pos);
+            final int progress = (int)(1000 * pos / MusicUtils.duration());
+            mSeekBar.setProgress(progress);
+        }
+
+        final long remaining = 1000 - pos % 1000;
+
+        return remaining;
+    }
+
+    private void queueNextRefresh(final long delay) {
+            final Message message = mTimeHandler.obtainMessage(REFRESH_TIME);
+            mTimeHandler.removeMessages(REFRESH_TIME);
+            mTimeHandler.sendMessageDelayed(message, delay);
+    }
+
+    private static final class TimeHandler extends Handler {
+
+        private final WeakReference<HomeActivity> homeActivity;
+
+        /**
+         * Constructor of <code>TimeHandler</code>
+         */
+        public TimeHandler(final HomeActivity activity) {
+            homeActivity = new WeakReference<HomeActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(final Message msg) {
+            switch (msg.what) {
+                case REFRESH_TIME:
+                    final long next = homeActivity.get().refreshCurrentTime();
+                    Log.d(TAG,""+next);
+                    homeActivity.get().queueNextRefresh(next);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     private void findViews(){
         mActionBarLocalMusic = (TextView)mCustomActionBarView.findViewById(R.id.action_button_local);
         mActionBarSetting = (TextView)mCustomActionBarView.findViewById(R.id.action_button_setting);
@@ -202,6 +320,7 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         mBABAlbumInfo = (TextView)findViewById(R.id.bottom_action_bar_line_two);
         mBABPlayPauseButton = (PlayPauseButton)findViewById(R.id.action_button_play);
 
+        mBABContent =findViewById(R.id.actionbar_bottom);
 
     }
 
@@ -210,12 +329,13 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
 
         mActionBarLocalMusic.setOnClickListener(this);
         mActionBarSetting.setOnClickListener(this);
+        mBABContent.setOnClickListener(this);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_home_actions,menu);
+        inflater.inflate(R.menu.activity_home_actions, menu);
      /*   MenuItem searchItem = menu.findItem(R.id.action_setting);
         ImageView searchView = (ImageView) searchItem.getActionView();
         searchView.setBackgroundResource(R.drawable.selector_actionbar_button);
@@ -241,13 +361,7 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         }
 
     }
-   private void showPopup(View view){
 
-       PopupMenu popupMenu = new PopupMenu(this,view);
-       MenuInflater inflater = popupMenu.getMenuInflater();
-       inflater.inflate(R.menu.actionbar_settings, popupMenu.getMenu());
-       popupMenu.show();
-   }
     private static final class PlaybackStatus extends BroadcastReceiver{
 
         private final WeakReference<HomeActivity> mReference;
@@ -265,6 +379,7 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
                 mReference.get().mBABPlayPauseButton.updateState();
             }else if(action.equals(MusicPlaybackService.META_CHANGED)){
                 mReference.get().updateBotomActionBarInfo();
+                mReference.get().updateBottomPopupInfo();
             }
         }
     }

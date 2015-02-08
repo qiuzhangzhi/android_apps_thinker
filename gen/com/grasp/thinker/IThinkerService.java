@@ -100,6 +100,14 @@ reply.writeNoException();
 reply.writeLong(_result);
 return true;
 }
+case TRANSACTION_duration:
+{
+data.enforceInterface(DESCRIPTOR);
+long _result = this.duration();
+reply.writeNoException();
+reply.writeLong(_result);
+return true;
+}
 case TRANSACTION_seek:
 {
 data.enforceInterface(DESCRIPTOR);
@@ -288,6 +296,23 @@ _data.recycle();
 }
 return _result;
 }
+@Override public long duration() throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+long _result;
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+mRemote.transact(Stub.TRANSACTION_duration, _data, _reply, 0);
+_reply.readException();
+_result = _reply.readLong();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+return _result;
+}
 @Override public void seek(long pos) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
@@ -428,14 +453,15 @@ static final int TRANSACTION_play = (android.os.IBinder.FIRST_CALL_TRANSACTION +
 static final int TRANSACTION_next = (android.os.IBinder.FIRST_CALL_TRANSACTION + 4);
 static final int TRANSACTION_prev = (android.os.IBinder.FIRST_CALL_TRANSACTION + 5);
 static final int TRANSACTION_position = (android.os.IBinder.FIRST_CALL_TRANSACTION + 6);
-static final int TRANSACTION_seek = (android.os.IBinder.FIRST_CALL_TRANSACTION + 7);
-static final int TRANSACTION_isPlaying = (android.os.IBinder.FIRST_CALL_TRANSACTION + 8);
-static final int TRANSACTION_isInitialized = (android.os.IBinder.FIRST_CALL_TRANSACTION + 9);
-static final int TRANSACTION_getQueuePosition = (android.os.IBinder.FIRST_CALL_TRANSACTION + 10);
-static final int TRANSACTION_refresh = (android.os.IBinder.FIRST_CALL_TRANSACTION + 11);
-static final int TRANSACTION_getArtistName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 12);
-static final int TRANSACTION_getTrackName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 13);
-static final int TRANSACTION_getAlbumName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 14);
+static final int TRANSACTION_duration = (android.os.IBinder.FIRST_CALL_TRANSACTION + 7);
+static final int TRANSACTION_seek = (android.os.IBinder.FIRST_CALL_TRANSACTION + 8);
+static final int TRANSACTION_isPlaying = (android.os.IBinder.FIRST_CALL_TRANSACTION + 9);
+static final int TRANSACTION_isInitialized = (android.os.IBinder.FIRST_CALL_TRANSACTION + 10);
+static final int TRANSACTION_getQueuePosition = (android.os.IBinder.FIRST_CALL_TRANSACTION + 11);
+static final int TRANSACTION_refresh = (android.os.IBinder.FIRST_CALL_TRANSACTION + 12);
+static final int TRANSACTION_getArtistName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 13);
+static final int TRANSACTION_getTrackName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 14);
+static final int TRANSACTION_getAlbumName = (android.os.IBinder.FIRST_CALL_TRANSACTION + 15);
 }
 public void openFile(java.lang.String path) throws android.os.RemoteException;
 public void open(long[] list, int position) throws android.os.RemoteException;
@@ -444,6 +470,7 @@ public void play() throws android.os.RemoteException;
 public void next() throws android.os.RemoteException;
 public void prev() throws android.os.RemoteException;
 public long position() throws android.os.RemoteException;
+public long duration() throws android.os.RemoteException;
 public void seek(long pos) throws android.os.RemoteException;
 public boolean isPlaying() throws android.os.RemoteException;
 public boolean isInitialized() throws android.os.RemoteException;
