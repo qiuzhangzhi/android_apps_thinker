@@ -161,6 +161,15 @@ public class MusicUtils {
         } catch (final RemoteException ignored) {
         }
     }
+    
+    public static void seek(final long position) {
+        if (mService != null) {
+            try {
+                mService.seek(position);
+            } catch (final RemoteException ignored) {
+            }
+        }
+    }
 
     public static void previous(){
         try {

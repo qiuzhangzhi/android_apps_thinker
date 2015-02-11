@@ -7,6 +7,7 @@ import com.grasp.thinker.ui.EnumFragment;
 import com.grasp.thinker.utils.MusicUtils;
 import com.grasp.thinker.utils.ThinkerUtils;
 import com.grasp.thinker.widgets.PlayPauseButton;
+import com.grasp.thinker.widgets.RepeatingImageButton;
 import com.grasp.thinker.widgets.theme.ThemeableSeekBar;
 
 import android.app.ActionBar;
@@ -17,7 +18,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -34,6 +37,7 @@ import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 
 /**
@@ -42,6 +46,8 @@ import java.lang.ref.WeakReference;
 public class HomeActivity extends FragmentActivity implements ViewPager.OnPageChangeListener,View.OnClickListener,
         ServiceConnection{
 
+    private final static boolean DEBUG = false;
+
     private final static String TAG = "HomeActivity";
 
     private final static int LOCAL_MUSIC = 0;
@@ -49,6 +55,14 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
     private final static int SETTING = 1;
 
     private static final int REFRESH_TIME = 1;
+
+    private long mPosOverride = -1;
+
+    private long mStartSeekPos = 0;
+
+    private long mLastSeekEventTime;
+
+    private long mLastShortSeekEventTime;
 
     private TimeHandler mTimeHandler;
 
@@ -88,6 +102,10 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
     private ThemeableSeekBar mSeekBar;
 
     private PlayPauseButton mPopupPlayPauseButton;
+
+    private RepeatingImageButton mPreviousButton;
+
+    private RepeatingImageButton mNextButton;
 
     private MusicUtils.ServiceToken mToken;
 
@@ -184,6 +202,13 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         mPlaybackStatus = new PlaybackStatus(this);
         mTimeHandler = new TimeHandler(this);
 
+     /*   sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse(
+                "file://" + Environment.getExternalStorageDirectory())));*/
+     /*   File file = new File(Environment.getExternalStorageDirectory(),"netease");
+        Intent intent =
+                new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        intent.setData(Uri.fromFile(file));
+        sendBroadcast(intent);*/
     }
     private void initPupUpWindow(){
         mPopupWindowContent = LayoutInflater.from(this).inflate(R.layout.popup_playback,null);
@@ -192,6 +217,8 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         mPopupTimeDuration = (TextView)mPopupWindowContent.findViewById(R.id.popup_song_time_duration);
         mSeekBar = (ThemeableSeekBar)mPopupWindowContent.findViewById(R.id.progress);
         mPopupPlayPauseButton = (PlayPauseButton)mPopupWindowContent.findViewById(R.id.popup_button_play);
+        mPreviousButton = (RepeatingImageButton)mPopupWindowContent.findViewById(R.id.popup_button_previous);
+        mNextButton =(RepeatingImageButton)mPopupWindowContent.findViewById(R.id.popup_button_next);
 
         mPlayBackPopupWindow = new PopupWindow(mPopupWindowContent, ViewGroup.LayoutParams.MATCH_PARENT,
                 ThinkerUtils.dp2px(this,100),true);
@@ -268,7 +295,7 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
     }
     private long refreshCurrentTime(){
 
-      final long pos = MusicUtils.position();
+      final long pos = mPosOverride < 0 ? MusicUtils.position() : mPosOverride;
 
         if(pos >= 0 && MusicUtils.duration() > 0){
             refreshCurrentTimeText(pos);
@@ -279,6 +306,74 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         final long remaining = 1000 - pos % 1000;
 
         return remaining;
+    }
+
+    private void scanForward(final int repcnt, long delta) {
+
+        if (repcnt == 0) {
+            mStartSeekPos = MusicUtils.position();
+            mLastSeekEventTime = 0;
+        } else {
+            if (delta < 5000) {
+                // seek at 10x speed for the first 5 seconds
+                delta = delta * 10;
+            } else {
+                // seek at 40x after that
+                delta = 50000 + (delta - 5000) * 40;
+            }
+            long newpos = mStartSeekPos + delta;
+            final long duration = MusicUtils.duration();
+            if (newpos >= duration) {
+                // move to next track
+                MusicUtils.next();
+                mStartSeekPos -= duration; // is OK to go negative
+                newpos -= duration;
+            }
+            if (delta - mLastSeekEventTime > 250 || repcnt < 0) {
+                MusicUtils.seek(newpos);
+                mLastSeekEventTime = delta;
+            }
+            if (repcnt >= 0) {
+                mPosOverride = newpos;
+            } else {
+                mPosOverride = -1;
+            }
+            refreshCurrentTime();
+        }
+    }
+
+    private void scanBackward(final int repcnt, long delta) {
+
+        if (repcnt == 0) {
+            mStartSeekPos = MusicUtils.position();
+            mLastSeekEventTime = 0;
+        } else {
+            if (delta < 5000) {
+                // seek at 10x speed for the first 5 seconds
+                delta = delta * 10;
+            } else {
+                // seek at 40x after that
+                delta = 50000 + (delta - 5000) * 40;
+            }
+            long newpos = mStartSeekPos - delta;
+            if (newpos < 0) {
+                // move to previous track
+                MusicUtils.previous();
+                final long duration = MusicUtils.duration();
+                mStartSeekPos += duration;
+                newpos += duration;
+            }
+            if (delta - mLastSeekEventTime > 250 || repcnt < 0) {
+                MusicUtils.seek(newpos);
+                mLastSeekEventTime = delta;
+            }
+            if (repcnt >= 0) {
+                mPosOverride = newpos;
+            } else {
+                mPosOverride = -1;
+            }
+            refreshCurrentTime();
+        }
     }
 
     private void queueNextRefresh(final long delay) {
@@ -303,7 +398,8 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
             switch (msg.what) {
                 case REFRESH_TIME:
                     final long next = homeActivity.get().refreshCurrentTime();
-                    Log.d(TAG,""+next);
+
+                    if(DEBUG) Log.d(TAG,""+next);
                     homeActivity.get().queueNextRefresh(next);
                     break;
                 default:
@@ -330,6 +426,9 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         mActionBarLocalMusic.setOnClickListener(this);
         mActionBarSetting.setOnClickListener(this);
         mBABContent.setOnClickListener(this);
+
+        mNextButton.setRepeatListener(mFastForwardListener);
+        mPreviousButton.setRepeatListener(mRewindListener);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -349,6 +448,19 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
     }
 
 
+    private final RepeatingImageButton.RepeatListener mFastForwardListener = new RepeatingImageButton.RepeatListener() {
+        @Override
+        public void onRepeat(View v, long duration, int repeatcount) {
+            scanForward(repeatcount,duration);
+        }
+    };
+
+    private final RepeatingImageButton.RepeatListener mRewindListener = new RepeatingImageButton.RepeatListener() {
+        @Override
+        public void onRepeat(View v, long duration, int repeatcount) {
+            scanBackward(repeatcount,duration);
+        }
+    };
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
