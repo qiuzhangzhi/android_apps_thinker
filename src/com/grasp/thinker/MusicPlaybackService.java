@@ -102,6 +102,18 @@ public class MusicPlaybackService extends Service {
 
     private long[] mPlayList = null;
 
+    /**
+     * Repeats the current track in a list
+     */
+    public static final int REPEAT_CURRENT = 1;
+
+    /**
+     * Repeats all the tracks in a list
+     */
+    public static final int REPEAT_ALL = 2;
+
+    private int mRepeatMode = REPEAT_ALL;
+
     private ComponentName mMediaButtonReceiverComponent;
 
     private RemoteControlClient mRemoteControlClient;
@@ -414,6 +426,18 @@ public class MusicPlaybackService extends Service {
         mPlayer.setNextDataSource(null);
     }
 
+
+    public void setRepeatMode(final int repeatmode) {
+        synchronized (this) {
+            mRepeatMode = repeatmode;
+            setNextTrack();
+        }
+    }
+
+    public int getRepeatMode(){
+
+        return mRepeatMode;
+    }
     private boolean isInitialized(){
         synchronized (this){
             return mPlayer.isInitialized();
@@ -500,11 +524,19 @@ public class MusicPlaybackService extends Service {
         }
     }
     private int getNextPosition(){
-        if (mPlayPos >= mPlayListLen - 1) {
-                return 0;
-        } else {
-            return mPlayPos + 1;
+        switch (mRepeatMode){
+            default:
+            case REPEAT_ALL:
+                if (mPlayPos >= mPlayListLen - 1) {
+                    return 0;
+                } else {
+                    return mPlayPos + 1;
+                }
+            case REPEAT_CURRENT:
+                return mPlayPos;
+
         }
+
     }
 
 
@@ -1062,9 +1094,20 @@ public class MusicPlaybackService extends Service {
         }
 
         @Override
+        public void setRepeatMode(int repeatmode) throws RemoteException {
+            mService.get().setRepeatMode(repeatmode);
+        }
+
+        @Override
+        public int getRepeatMode() throws RemoteException {
+            return mService.get().getRepeatMode();
+        }
+
+        @Override
         public boolean isInitialized() throws RemoteException {
             return mService.get().isInitialized();
         }
+
 
         @Override
         public int getQueuePosition() throws RemoteException {

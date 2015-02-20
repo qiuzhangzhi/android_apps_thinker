@@ -2,10 +2,13 @@ package com.grasp.thinker.ui.activitys;
 
 import com.grasp.thinker.MusicPlaybackService;
 import com.grasp.thinker.R;
+import com.grasp.thinker.ThinkerConstant;
 import com.grasp.thinker.adapters.PageAdapter;
+import com.grasp.thinker.interfaces.ColorObserver;
 import com.grasp.thinker.ui.EnumFragment;
 import com.grasp.thinker.utils.MusicUtils;
 import com.grasp.thinker.utils.ThinkerUtils;
+import com.grasp.thinker.widgets.ColorSchemeDialog;
 import com.grasp.thinker.widgets.PlayPauseButton;
 import com.grasp.thinker.widgets.RepeatingImageButton;
 import com.grasp.thinker.widgets.theme.ThemeableSeekBar;
@@ -44,9 +47,9 @@ import java.lang.ref.WeakReference;
  * Created by qiuzhangzhi on 15/1/4.
  */
 public class HomeActivity extends FragmentActivity implements ViewPager.OnPageChangeListener,View.OnClickListener,
-        ServiceConnection{
+        ServiceConnection,ColorObserver{
 
-    private final static boolean DEBUG = false;
+    private final static boolean DEBUG = true;
 
     private final static String TAG = "HomeActivity";
 
@@ -186,12 +189,12 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
 
         mActionBar = getActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(false);
-        mActionBar.setDisplayShowHomeEnabled (false);
+        mActionBar.setDisplayShowHomeEnabled(false);
         mActionBar.setDisplayShowCustomEnabled(true);
         mActionBar.setDisplayShowTitleEnabled(false);
 
         mActionBar.setCustomView(mCustomActionBarView);
-
+        mActionBar.setBackgroundDrawable(new ColorDrawable(ThinkerConstant.mThemeColor));
 
         // Control the media volume
       //  setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -202,6 +205,7 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         mPlaybackStatus = new PlaybackStatus(this);
         mTimeHandler = new TimeHandler(this);
 
+        ColorSchemeDialog.addObserver(this);
      /*   sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse(
                 "file://" + Environment.getExternalStorageDirectory())));*/
      /*   File file = new File(Environment.getExternalStorageDirectory(),"netease");
@@ -494,5 +498,16 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
                 mReference.get().updateBottomPopupInfo();
             }
         }
+
+
+    }
+
+    @Override
+    public void updateColor(int color) {
+        if (DEBUG) Log.d(TAG,"updateColor");
+        mActionBar.setBackgroundDrawable(new ColorDrawable(color));
+        mActionBar.setDisplayShowTitleEnabled(true);
+        mActionBar.setDisplayShowTitleEnabled(false);
     }
 }
+

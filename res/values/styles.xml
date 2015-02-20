@@ -8,7 +8,6 @@
     </style>
 
     <style name="ThinkerActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:background">@color/thinker_basic_color</item>
 
     </style>
 

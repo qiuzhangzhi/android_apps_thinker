@@ -1,6 +1,8 @@
 package com.grasp.thinker.utils;
 
 
+import com.grasp.thinker.R;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -19,6 +21,8 @@ public class PreferenceUtils {
 
     private static final String SONG_FILTERS ="song_filters";
 
+    private static final String THEME_COLOR = "theme_color";
+
     private static PreferenceUtils sInstance;
 
     private final SharedPreferences mPreferences;
@@ -28,7 +32,7 @@ public class PreferenceUtils {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public static PreferenceUtils getsInstance(final Context context){
+    public static PreferenceUtils getInstance(final Context context){
         if(sInstance == null){
             sInstance = new PreferenceUtils(context.getApplicationContext());
         }
@@ -82,7 +86,19 @@ public class PreferenceUtils {
         editor.putStringSet(SONG_FILTERS, filterSet);
         editor.apply();
     }
+    
     public Set<String> getSongFilter(){
         return mPreferences.getStringSet(SONG_FILTERS,null);
     }
+
+    public void setThemeColor(int color){
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putInt(THEME_COLOR,color);
+        editor.apply();
+    }
+
+    public int getThemeColor(Context context){
+        return mPreferences.getInt(THEME_COLOR,context.getResources().getColor(R.color.thinker_basic_color));
+    }
+
 }

@@ -27,7 +27,7 @@ public class FilterAdapter extends BaseAdapter {
     public FilterAdapter(Context context){
         mContext = context;
         mData = new ArrayList<String>();
-        mPreferenceUtils = PreferenceUtils.getsInstance(mContext);
+        mPreferenceUtils = PreferenceUtils.getInstance(mContext);
     }
 
     @Override

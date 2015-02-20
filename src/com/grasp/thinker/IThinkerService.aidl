@@ -16,6 +16,8 @@ interface IThinkerService{
     boolean isInitialized();
     int getQueuePosition();
     void refresh(in long[] list);
+    int getRepeatMode();
+    void setRepeatMode(int repeatmode);
 
     String getArtistName();
     String getTrackName();

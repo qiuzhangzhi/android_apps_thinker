@@ -1,6 +1,7 @@
 package com.grasp.thinker.ui.activitys;
 
 import com.grasp.thinker.R;
+import com.grasp.thinker.ThinkerConstant;
 import com.grasp.thinker.adapters.FilterAdapter;
 import com.grasp.thinker.utils.MusicUtils;
 import com.grasp.thinker.utils.PreferenceUtils;
@@ -48,12 +49,14 @@ public class DialogFilterActivity extends Activity implements View.OnClickListen
 
     private EditText mEditTextAdd;
 
+    private View mTitleDivider;
+
     private PreferenceUtils mPreferenceUtils;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPreferenceUtils = PreferenceUtils.getsInstance(this);
+        mPreferenceUtils = PreferenceUtils.getInstance(this);
         initData();
         setContentView(R.layout.dialog_filter);
 
@@ -69,6 +72,7 @@ public class DialogFilterActivity extends Activity implements View.OnClickListen
         mImageViewHeaderLetter =(ImageView)mHeader.findViewById(R.id.filter_letter_editer);
         mImageViewEditerAdd = (ImageView)mFooter.findViewById(R.id.filter_editer_add);
         mEditTextAdd = (EditText)mFooter.findViewById(R.id.filer_editer);
+        mTitleDivider = findViewById(R.id.filter_divider);
         init();
 
     }
@@ -94,6 +98,8 @@ public class DialogFilterActivity extends Activity implements View.OnClickListen
         }else {
             mImageViewHeaderLetter.setImageResource(R.drawable.dialog_filter_add_ic);
         }
+        mTitleDivider.setBackgroundColor(ThinkerConstant.mThemeColor);
+
     }
     @Override
     public void onClick(View v) {

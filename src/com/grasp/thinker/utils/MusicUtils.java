@@ -4,7 +4,6 @@ import com.grasp.thinker.IThinkerService;
 import com.grasp.thinker.MusicPlaybackService;
 import com.grasp.thinker.R;
 import com.grasp.thinker.adapters.SongAdapter;
-import com.grasp.thinker.model.Song;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -15,8 +14,6 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.WeakHashMap;
 
 /**
@@ -178,6 +175,32 @@ public class MusicUtils {
             }
         } catch (final RemoteException ignored) {
         }
+    }
+
+    public static void cycleRepeat() {
+        try {
+            if (mService != null) {
+                switch (mService.getRepeatMode()) {
+                    case MusicPlaybackService.REPEAT_ALL:
+                        mService.setRepeatMode(MusicPlaybackService.REPEAT_CURRENT);
+                        break;
+                    case MusicPlaybackService.REPEAT_CURRENT:
+                        mService.setRepeatMode(MusicPlaybackService.REPEAT_ALL);
+                        break;
+                }
+            }
+        } catch (final RemoteException ignored) {
+        }
+    }
+
+    public static final int getRepeatMode() {
+        if (mService != null) {
+            try {
+                return mService.getRepeatMode();
+            } catch (final RemoteException ignored) {
+            }
+        }
+        return 0;
     }
 
     public static final String getTrackName() {

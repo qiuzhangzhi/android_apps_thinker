@@ -4,15 +4,25 @@
 
     <!-- common -->
     <string name="divider_artist_album">%1$s - %2$s</string>
+    <string name="hex">#</string>
     <!-- actionbar -->
     <string name="actionbar_music">音乐</string>
     <string name="actionbar_setting">设置</string>
     <string name="actionbar_setting_filter">过滤歌曲</string>
-
+    <string name="actionbar_setting_color">换肤</string>
 
     <string name="dialog_filter_title">过滤类型</string>
     <string name="dialog_filter_num">数字</string>
     <string name="dialog_filter_letter">字母</string>
+
+
+    <string name="dialog_color_picker_title">自定义配色</string>
+    <string name="dialog_color_picker_current">当前</string>
+    <string name="dialog_color_picker_new">新</string>
+
+
+    <string name="discription_repeat_all">循环播放</string>
+    <string name="discription_repeat_current">单曲循环</string>
 
     <!-- Do not translate. Duration format for duration < 1 hour -->
     <string name="durationformatshort" translatable="false">%2$d:%3$02d</string>

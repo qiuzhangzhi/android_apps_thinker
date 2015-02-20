@@ -67,6 +67,12 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/padding_large"
                 />
+        <com.grasp.thinker.widgets.RepeatButton
+                android:id="@+id/popup_button_repeat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/padding_large"
+                />
     </LinearLayout>
 
 </LinearLayout>

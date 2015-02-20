@@ -2,6 +2,7 @@ package com.grasp.thinker.widgets;
 
 import com.grasp.thinker.R;
 import com.grasp.thinker.ui.activitys.DialogFilterActivity;
+import com.grasp.thinker.utils.ThinkerUtils;
 
 import android.app.ActionBar;
 import android.content.Context;
@@ -51,6 +52,14 @@ public class SettingActionProvider extends ActionProvider {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         showDialog();
+                        return true;
+                    }
+                });
+        subMenu.add(mContext.getString(R.string.actionbar_setting_color)).setIcon(null)
+                .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        ThinkerUtils.showColorPicker(mContext);
                         return true;
                     }
                 });

@@ -25,7 +25,7 @@ public class SongLoader extends WrappedAsyncTaskLoader<List<Song>> {
     private Cursor mCursor;
     public SongLoader(final Context context){
         super(context);
-        mPreferenceUtils = PreferenceUtils.getsInstance(context);
+        mPreferenceUtils = PreferenceUtils.getInstance(context);
     }
 
     @Override
