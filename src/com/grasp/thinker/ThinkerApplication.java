@@ -9,14 +9,18 @@ import android.app.Application;
  */
 public class ThinkerApplication extends Application {
 
+    public static int mThemeColor;
+
+    public static int mAlarmWhich = 0;
+
     @Override
     public void onCreate() {
         super.onCreate();
-        initConstant();
+        init();
 
     }
 
-    public void initConstant(){
-        ThinkerConstant.mThemeColor = PreferenceUtils.getInstance(this).getThemeColor(this);
+    public void init(){
+        mThemeColor = PreferenceUtils.getInstance(this).getThemeColor(this);
     }
 }

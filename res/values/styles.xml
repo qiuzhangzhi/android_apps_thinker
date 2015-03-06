@@ -2,14 +2,9 @@
 <resources >
 
     <style name="ThinkerTheme" parent="@android:style/Theme.Holo.Light">
-        <item name="android:actionBarStyle">@style/ThinkerActionBarStyle</item>
         <item name="android:actionBarItemBackground">@drawable/selector_actionbar_button</item>
-
     </style>
 
-    <style name="ThinkerActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
-
-    </style>
 
     <style name="BottomActionBarText">
         <item name="android:layout_width">wrap_content</item>

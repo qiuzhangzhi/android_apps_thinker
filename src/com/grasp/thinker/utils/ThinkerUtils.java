@@ -1,6 +1,7 @@
 package com.grasp.thinker.utils;
 
 import com.grasp.thinker.R;
+import com.grasp.thinker.ThinkerApplication;
 import com.grasp.thinker.ThinkerConstant;
 import com.grasp.thinker.widgets.ColorSchemeDialog;
 
@@ -71,7 +72,7 @@ public class ThinkerUtils {
                     public void onClick(DialogInterface dialog, int which) {
                         PreferenceUtils.getInstance(context).setThemeColor(
                                 colorPickerView.getColor());
-                        ThinkerConstant.mThemeColor = colorPickerView.getColor();
+                        ThinkerApplication.mThemeColor = colorPickerView.getColor();
                     }
                 });
         colorPickerView.setButton(AlertDialog.BUTTON_NEGATIVE,

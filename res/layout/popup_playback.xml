@@ -48,30 +48,41 @@
             android:gravity="center"
             >
 
+        <ImageButton
+                android:id="@+id/popup_alarm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:src="@drawable/player_alarm"
+                android:layout_weight="1"
+
+
+                />
         <com.grasp.thinker.widgets.RepeatingImageButton
                 android:id="@+id/popup_button_previous"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 />
 
         <com.grasp.thinker.widgets.PlayPauseButton
                 android:id="@+id/popup_button_play"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/padding_large"
+                android:layout_weight="1"
 
                 />
         <com.grasp.thinker.widgets.RepeatingImageButton
                 android:id="@+id/popup_button_next"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/padding_large"
+                android:layout_weight="1"
                 />
         <com.grasp.thinker.widgets.RepeatButton
                 android:id="@+id/popup_button_repeat"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/padding_large"
+                android:layout_weight="1"
                 />
     </LinearLayout>
 

@@ -28,12 +28,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-            <intent-filter>
-                <action android:name="com.grasp.thinker.main" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
         <activity android:name=".ui.activitys.DialogFilterActivity"
                   android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar"
@@ -46,6 +40,9 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".MusicPlaybackService"/>
+        <service
+                android:name=".MusicPlaybackService"
+                android:process=":main"
+                />
     </application>
 </manifest>

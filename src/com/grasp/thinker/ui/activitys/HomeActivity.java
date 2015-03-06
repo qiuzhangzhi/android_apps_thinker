@@ -2,10 +2,12 @@ package com.grasp.thinker.ui.activitys;
 
 import com.grasp.thinker.MusicPlaybackService;
 import com.grasp.thinker.R;
+import com.grasp.thinker.ThinkerApplication;
 import com.grasp.thinker.ThinkerConstant;
 import com.grasp.thinker.adapters.PageAdapter;
 import com.grasp.thinker.interfaces.ColorObserver;
 import com.grasp.thinker.ui.EnumFragment;
+import com.grasp.thinker.ui.fragmens.AlarmDialogFragment;
 import com.grasp.thinker.utils.MusicUtils;
 import com.grasp.thinker.utils.ThinkerUtils;
 import com.grasp.thinker.widgets.ColorSchemeDialog;
@@ -14,6 +16,8 @@ import com.grasp.thinker.widgets.RepeatingImageButton;
 import com.grasp.thinker.widgets.theme.ThemeableSeekBar;
 
 import android.app.ActionBar;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -21,12 +25,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -37,11 +40,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.Calendar;
 
 /**
  * Created by qiuzhangzhi on 15/1/4.
@@ -102,13 +107,15 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
 
     private TextView mPopupTimeDuration;
 
-    private ThemeableSeekBar mSeekBar;
+    private ThemeableSeekBar mPopupSeekBar;
 
     private PlayPauseButton mPopupPlayPauseButton;
 
-    private RepeatingImageButton mPreviousButton;
+    private RepeatingImageButton mPopupPreviousButton;
 
-    private RepeatingImageButton mNextButton;
+    private RepeatingImageButton mPopupNextButton;
+
+    private ImageButton mPopupAlarmButton;
 
     private MusicUtils.ServiceToken mToken;
 
@@ -131,6 +138,7 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         final IntentFilter filter = new IntentFilter();
         filter.addAction(MusicPlaybackService.META_CHANGED);
         filter.addAction(MusicPlaybackService.PLAYSTATE_CHANGED);
+        filter.addAction(MusicPlaybackService.PLAYSTATE_ALARM_CLOSE);
         registerReceiver(mPlaybackStatus, filter);
 
         final long next = refreshCurrentTime();
@@ -194,7 +202,7 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         mActionBar.setDisplayShowTitleEnabled(false);
 
         mActionBar.setCustomView(mCustomActionBarView);
-        mActionBar.setBackgroundDrawable(new ColorDrawable(ThinkerConstant.mThemeColor));
+        mActionBar.setBackgroundDrawable(new ColorDrawable(ThinkerApplication.mThemeColor));
 
         // Control the media volume
       //  setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -219,16 +227,19 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         mPopupSongInfo = (TextView)mPopupWindowContent.findViewById(R.id.popup_song_info);
         mPopupTimeProgress = (TextView)mPopupWindowContent.findViewById(R.id.popup_song_time_progress);
         mPopupTimeDuration = (TextView)mPopupWindowContent.findViewById(R.id.popup_song_time_duration);
-        mSeekBar = (ThemeableSeekBar)mPopupWindowContent.findViewById(R.id.progress);
+        mPopupSeekBar = (ThemeableSeekBar)mPopupWindowContent.findViewById(R.id.progress);
         mPopupPlayPauseButton = (PlayPauseButton)mPopupWindowContent.findViewById(R.id.popup_button_play);
-        mPreviousButton = (RepeatingImageButton)mPopupWindowContent.findViewById(R.id.popup_button_previous);
-        mNextButton =(RepeatingImageButton)mPopupWindowContent.findViewById(R.id.popup_button_next);
+        mPopupPreviousButton = (RepeatingImageButton)mPopupWindowContent.findViewById(R.id.popup_button_previous);
+        mPopupNextButton =(RepeatingImageButton)mPopupWindowContent.findViewById(R.id.popup_button_next);
+        mPopupAlarmButton = (ImageButton)mPopupWindowContent.findViewById(R.id.popup_alarm);
+
 
         mPlayBackPopupWindow = new PopupWindow(mPopupWindowContent, ViewGroup.LayoutParams.MATCH_PARENT,
                 ThinkerUtils.dp2px(this,100),true);
         mPlayBackPopupWindow.setOutsideTouchable(true);
         mPlayBackPopupWindow.setBackgroundDrawable(new ColorDrawable(R.color.white));
         mPlayBackPopupWindow.setAnimationStyle(R.style.PopupAnimation);
+        mPopupAlarmButton.setOnClickListener(this);
 
     }
     @Override
@@ -278,6 +289,10 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
             case R.id.actionbar_bottom:
                 mPlayBackPopupWindow.showAtLocation(mBABContent, Gravity.BOTTOM,0,0);
                 break;
+            case R.id.popup_alarm:
+                AlarmDialogFragment alarmDialog = new AlarmDialogFragment();
+                alarmDialog.show(getSupportFragmentManager(),"alarmDialog");
+                break;
         }
     }
 
@@ -304,7 +319,7 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         if(pos >= 0 && MusicUtils.duration() > 0){
             refreshCurrentTimeText(pos);
             final int progress = (int)(1000 * pos / MusicUtils.duration());
-            mSeekBar.setProgress(progress);
+            mPopupSeekBar.setProgress(progress);
         }
 
         final long remaining = 1000 - pos % 1000;
@@ -431,8 +446,8 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         mActionBarSetting.setOnClickListener(this);
         mBABContent.setOnClickListener(this);
 
-        mNextButton.setRepeatListener(mFastForwardListener);
-        mPreviousButton.setRepeatListener(mRewindListener);
+        mPopupNextButton.setRepeatListener(mFastForwardListener);
+        mPopupPreviousButton.setRepeatListener(mRewindListener);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -493,9 +508,12 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
 
             if(action.equals(MusicPlaybackService.PLAYSTATE_CHANGED)){
                 mReference.get().mBABPlayPauseButton.updateState();
+                mReference.get().mPopupPlayPauseButton.updateState();
             }else if(action.equals(MusicPlaybackService.META_CHANGED)){
                 mReference.get().updateBotomActionBarInfo();
                 mReference.get().updateBottomPopupInfo();
+            }else if(action.equals(MusicPlaybackService.PLAYSTATE_ALARM_CLOSE)){
+                ThinkerApplication.mAlarmWhich = 0 ;
             }
         }
 

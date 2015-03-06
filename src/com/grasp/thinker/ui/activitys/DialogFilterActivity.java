@@ -1,6 +1,7 @@
 package com.grasp.thinker.ui.activitys;
 
 import com.grasp.thinker.R;
+import com.grasp.thinker.ThinkerApplication;
 import com.grasp.thinker.ThinkerConstant;
 import com.grasp.thinker.adapters.FilterAdapter;
 import com.grasp.thinker.utils.MusicUtils;
@@ -98,7 +99,7 @@ public class DialogFilterActivity extends Activity implements View.OnClickListen
         }else {
             mImageViewHeaderLetter.setImageResource(R.drawable.dialog_filter_add_ic);
         }
-        mTitleDivider.setBackgroundColor(ThinkerConstant.mThemeColor);
+        mTitleDivider.setBackgroundColor(ThinkerApplication.mThemeColor);
 
     }
     @Override

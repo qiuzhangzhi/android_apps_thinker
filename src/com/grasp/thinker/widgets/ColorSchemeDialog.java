@@ -13,6 +13,7 @@ package com.grasp.thinker.widgets;
 
 
 import com.grasp.thinker.R;
+import com.grasp.thinker.ThinkerApplication;
 import com.grasp.thinker.ThinkerConstant;
 import com.grasp.thinker.interfaces.ColorObserver;
 import com.grasp.thinker.utils.PreferenceUtils;
@@ -77,7 +78,7 @@ public class ColorSchemeDialog extends AlertDialog implements
         setOnDismissListener(new OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                notifyObserver(ThinkerConstant.mThemeColor);
+                notifyObserver(ThinkerApplication.mThemeColor);
             }
         });
     }

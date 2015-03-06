@@ -21,6 +21,17 @@
     <string name="dialog_color_picker_new">新</string>
 
 
+    <string name="dialog_alarm_title">定时关闭</string>
+
+    <string name="dialog_alarm_time_no">未开启</string>
+    <string name="dialog_alarm_time_10">10分钟后</string>
+    <string name="dialog_alarm_time_20">20分钟后</string>
+    <string name="dialog_alarm_time_30">30分钟后</string>
+    <string name="dialog_alarm_time_50">50分钟后</string>
+    <string name="dialog_alarm_time_70">70分钟后</string>
+    <string name="dialog_alarm_time_90">90分钟后</string>
+
+
     <string name="discription_repeat_all">循环播放</string>
     <string name="discription_repeat_current">单曲循环</string>
 

@@ -1,5 +1,8 @@
 package com.grasp.thinker;
 
+import com.grasp.thinker.utils.PreferenceUtils;
+
+import android.app.Application;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -13,13 +16,7 @@ import android.media.MediaPlayer;
 import android.media.RemoteControlClient;
 import android.media.audiofx.AudioEffect;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
-import android.os.PowerManager;
-import android.os.RemoteException;
+import android.os.*;
 import android.provider.MediaStore;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -35,34 +32,39 @@ public class MusicPlaybackService extends Service {
 
     private final static String TAG = "MusicPlaybackService" ;
 
+    private final boolean DEBUG = true;
+
     private static final long REWIND_INSTEAD_PREVIOUS_THRESHOLD = 10000;
 
-    public static final String SERVICECMD = "com.andrew.apollo.musicservicecommand";
+    public static final String SERVICECMD = "com.grasp.thinker.musicservicecommand";
 
-    public static final String PAUSE_ACTION = "com.andrew.apollo.pause";
+    public static final String PAUSE_ACTION = "com.grasp.thinker.pause";
 
     /**
      * Called to go to stop the playback
      */
-    public static final String STOP_ACTION = "com.andrew.apollo.stop";
+    public static final String STOP_ACTION = "com.grasp.thinker.stop";
 
     /**
      * Called to go to the previous track
      */
-    public static final String PREVIOUS_ACTION = "com.andrew.apollo.previous";
+    public static final String PREVIOUS_ACTION = "com.grasp.thinker.previous";
 
     /**
      * Called to go to the next track
      */
-    public static final String NEXT_ACTION = "com.andrew.apollo.next";
+    public static final String NEXT_ACTION = "com.grasp.thinker.next";
 
     /**
      * Called to change the repeat mode
      */
-    public static final String REPEAT_ACTION = "com.andrew.apollo.repeat";
+    public static final String REPEAT_ACTION = "com.grasp.thinker.repeat";
 
+    public static final String EXIT = "com.grasp.thinker.exit";
 
     public static final String FROM_MEDIA_BUTTON = "frommediabutton";
+
+    public static final String PLAYSTATE_ALARM_CLOSE = "com.grasp.thinker.alarmclose";
 
     public static final String PLAYSTATE_CHANGED = "com.grasp.thinker.playstatechanged";
 
@@ -259,6 +261,10 @@ public class MusicPlaybackService extends Service {
             pause();
         } else if (CMDPLAY.equals(command)) {
             play();
+        }else if(EXIT.equals(action)){
+            if(DEBUG) Log.d(TAG,"EXIT BY ALARM");
+            notifyChange(PLAYSTATE_ALARM_CLOSE);
+            pause();
         }
     }
     /**

@@ -5,5 +5,5 @@ package com.grasp.thinker;
  */
 public class ThinkerConstant {
 
-    public static int mThemeColor;
+
 }

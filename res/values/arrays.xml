@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="alarm_times">
+        <item>@string/dialog_alarm_time_no</item>
+        <item>@string/dialog_alarm_time_10</item>
+        <item>@string/dialog_alarm_time_20</item>
+        <item>@string/dialog_alarm_time_30</item>
+        <item>@string/dialog_alarm_time_50</item>
+        <item>@string/dialog_alarm_time_70</item>
+        <item>@string/dialog_alarm_time_90</item>
+    </string-array>
+</resources>

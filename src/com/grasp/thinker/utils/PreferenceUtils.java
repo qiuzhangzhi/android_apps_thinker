@@ -6,6 +6,7 @@ import com.grasp.thinker.R;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,6 +23,8 @@ public class PreferenceUtils {
     private static final String SONG_FILTERS ="song_filters";
 
     private static final String THEME_COLOR = "theme_color";
+
+    private static final String ALARM_WHICH = "alarm_which";
 
     private static PreferenceUtils sInstance;
 
@@ -100,5 +103,6 @@ public class PreferenceUtils {
     public int getThemeColor(Context context){
         return mPreferences.getInt(THEME_COLOR,context.getResources().getColor(R.color.thinker_basic_color));
     }
+
 
 }
