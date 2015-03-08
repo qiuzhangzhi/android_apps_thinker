@@ -3,7 +3,6 @@ package com.grasp.thinker.ui.activitys;
 import com.grasp.thinker.MusicPlaybackService;
 import com.grasp.thinker.R;
 import com.grasp.thinker.ThinkerApplication;
-import com.grasp.thinker.ThinkerConstant;
 import com.grasp.thinker.adapters.PageAdapter;
 import com.grasp.thinker.interfaces.ColorObserver;
 import com.grasp.thinker.ui.EnumFragment;
@@ -16,8 +15,6 @@ import com.grasp.thinker.widgets.RepeatingImageButton;
 import com.grasp.thinker.widgets.theme.ThemeableSeekBar;
 
 import android.app.ActionBar;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -29,7 +26,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -44,9 +40,7 @@ import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import java.io.File;
 import java.lang.ref.WeakReference;
-import java.util.Calendar;
 
 /**
  * Created by qiuzhangzhi on 15/1/4.

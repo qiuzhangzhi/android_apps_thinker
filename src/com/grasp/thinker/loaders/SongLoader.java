@@ -1,6 +1,7 @@
 package com.grasp.thinker.loaders;
 
 import com.grasp.thinker.model.Song;
+import com.grasp.thinker.persistent.ThinkerDatabase;
 import com.grasp.thinker.utils.PreferenceUtils;
 
 import android.content.Context;
@@ -20,18 +21,14 @@ public class SongLoader extends WrappedAsyncTaskLoader<List<Song>> {
 
     private final ArrayList<Song> mSongList = new ArrayList<Song>();
 
-    private static PreferenceUtils mPreferenceUtils;
-
     private Cursor mCursor;
     public SongLoader(final Context context){
         super(context);
-        mPreferenceUtils = PreferenceUtils.getInstance(context);
     }
 
     @Override
     public List<Song> loadInBackground() {
-         mCursor = getSongCursor(getContext());
-        if(mCursor!=null && mCursor.moveToFirst()){
+   /*     if(mCursor!=null && mCursor.moveToFirst()){
             do{
 
                 final long id = mCursor.getLong(0);
@@ -49,31 +46,22 @@ public class SongLoader extends WrappedAsyncTaskLoader<List<Song>> {
         if(mCursor!=null){
             mCursor.close();
             mCursor = null;
+        }*/
+        mSongList.addAll(ThinkerDatabase.getsInstance(getContext()).getPlaylist());
+        if(mSongList == null || mSongList.size() == 0){
+            mCursor = getSongCursor(getContext());
+            ThinkerDatabase.getsInstance(getContext()).initDatabase(mCursor);
+            mSongList.addAll(ThinkerDatabase.getsInstance(getContext()).getPlaylist());
         }
         return mSongList;
     }
 
     public final static Cursor getSongCursor(final Context context){
 
-        Set<String> filters = mPreferenceUtils.getSongFilter();
 
         final StringBuilder mSelectionClause = new StringBuilder();
         mSelectionClause.append(Audio.AudioColumns.IS_MUSIC + "= 1 ");
         mSelectionClause.append("AND "+ Audio.AudioColumns.TITLE + " !='' ");
-
-        if(mPreferenceUtils.getIsFilterNum()){
-            mSelectionClause.append("AND "+ Audio.AudioColumns.TITLE + " NOT GLOB '[0-9]*' ");
-        }
-        if(mPreferenceUtils.getIsFilterLetter()){
-            mSelectionClause.append("AND "+ Audio.AudioColumns.TITLE + " NOT GLOB '[a-z]*' ");
-        }
-        if(filters!=null){
-            for (String filter : filters){
-                mSelectionClause.append("AND "+ Audio.AudioColumns.TITLE + " NOT GLOB '" + filter +"*' ");
-            }
-        }
-
-
         return context.getContentResolver().query(
 
                 Audio.Media.EXTERNAL_CONTENT_URI,
