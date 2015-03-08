@@ -52,6 +52,7 @@ public class ThinkerDatabase {
 
 
     public void initDatabase(Cursor cursor){
+
         if(cursor != null && cursor.moveToLast()){
             do{
                 ContentValues values = new ContentValues();
@@ -62,7 +63,11 @@ public class ThinkerDatabase {
                 values.put(PlayListEntry.COLUMN_DURATION, cursor.getLong(4));
                 database.insert(PlayListEntry.TABLE_NAME,null,values);
             }while (cursor.moveToPrevious());
+        }
+
+        if(cursor != null){
             cursor.close();
+            cursor = null;
         }
 
     }
@@ -100,6 +105,11 @@ public class ThinkerDatabase {
 
                 result.add(song);
             }while (cursor.moveToNext());
+
+        }
+        if(cursor != null){
+            cursor.close();
+            cursor = null;
         }
         return result;
     }

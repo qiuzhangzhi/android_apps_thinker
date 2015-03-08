@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,39 +20,35 @@ import java.util.Set;
  */
 public class SongLoader extends WrappedAsyncTaskLoader<List<Song>> {
 
+    private static final String TAG = "SongLoader" ;
+
+    private static final boolean DEBUG = true;
+
+    private int i = 0;
     private final ArrayList<Song> mSongList = new ArrayList<Song>();
 
     private Cursor mCursor;
+
     public SongLoader(final Context context){
         super(context);
     }
 
     @Override
     public List<Song> loadInBackground() {
-   /*     if(mCursor!=null && mCursor.moveToFirst()){
-            do{
 
-                final long id = mCursor.getLong(0);
-                final String songName = mCursor.getString(1);
-                final String songAlbum = mCursor.getString(2);
-                final String songArtist = mCursor.getString(3);
-                final long songDuration = mCursor.getLong(4);
-
-                final int songDurationSecond = (int) songDuration/1000;
-
-                final Song song = new Song(id,songName,songArtist,songAlbum,songDurationSecond);
-                mSongList.add(song);
-            }while (mCursor.moveToNext());
-        }
-        if(mCursor!=null){
-            mCursor.close();
-            mCursor = null;
-        }*/
         mSongList.addAll(ThinkerDatabase.getsInstance(getContext()).getPlaylist());
+
         if(mSongList == null || mSongList.size() == 0){
+            if (DEBUG) {
+                Log.d("qunimabi"," "+i++);
+            }
             mCursor = getSongCursor(getContext());
             ThinkerDatabase.getsInstance(getContext()).initDatabase(mCursor);
             mSongList.addAll(ThinkerDatabase.getsInstance(getContext()).getPlaylist());
+            if (mCursor != null){
+                mCursor.close();
+                mCursor =null;
+            }
         }
         return mSongList;
     }
