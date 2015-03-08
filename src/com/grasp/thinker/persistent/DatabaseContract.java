@@ -16,6 +16,8 @@ public class DatabaseContract {
         public static final String COLUMN_ALBUM = "album" ;
         public static final String COLUMN_DURATION = "duration" ;
         public static final String COLUMN_PLAYTIME = "playtime" ;
+        public static final String COLUMN_DATE_ADD = "date" ;
+
     }
 
 }

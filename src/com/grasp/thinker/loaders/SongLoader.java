@@ -39,17 +39,15 @@ public class SongLoader extends WrappedAsyncTaskLoader<List<Song>> {
         mSongList.addAll(ThinkerDatabase.getsInstance(getContext()).getPlaylist());
 
         if(mSongList == null || mSongList.size() == 0){
-            if (DEBUG) {
-                Log.d("qunimabi"," "+i++);
-            }
             mCursor = getSongCursor(getContext());
-            ThinkerDatabase.getsInstance(getContext()).initDatabase(mCursor);
+            ThinkerDatabase.getsInstance(getContext()).bulkInsertInitPlaylist(mCursor);
             mSongList.addAll(ThinkerDatabase.getsInstance(getContext()).getPlaylist());
             if (mCursor != null){
                 mCursor.close();
                 mCursor =null;
             }
         }
+
         return mSongList;
     }
 
@@ -69,14 +67,14 @@ public class SongLoader extends WrappedAsyncTaskLoader<List<Song>> {
                         Audio.AudioColumns.ALBUM,
                         Audio.AudioColumns.ARTIST,
                         Audio.AudioColumns.DURATION,
+                        Audio.AudioColumns.DATE_ADDED,
 
                 },
 
                 mSelectionClause.toString(),
 
                 null,
-
-                MediaStore.Audio.Media.DATE_ADDED + " DESC"
+                null
         );
     }
 }

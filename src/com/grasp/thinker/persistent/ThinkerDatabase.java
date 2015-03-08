@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 
 import com.grasp.thinker.model.Song;
 import com.grasp.thinker.persistent.DatabaseContract.*;
@@ -50,7 +51,7 @@ public class ThinkerDatabase {
         database = mDBHelper.getWritableDatabase();
     }
 
-
+    //此方法需消耗很长时间 废弃不用
     public void initDatabase(Cursor cursor){
 
         if(cursor != null && cursor.moveToLast()){
@@ -72,6 +73,31 @@ public class ThinkerDatabase {
 
     }
 
+    public void bulkInsertInitPlaylist(Cursor cursor) {
+        String sql = "INSERT INTO "+ PlayListEntry.TABLE_NAME +" VALUES (?,?,?,?,?,?,?);";
+        SQLiteStatement statement = database.compileStatement(sql);
+        database.beginTransaction();
+        if(cursor != null && cursor.moveToFirst()){
+            do{
+                statement.clearBindings();
+                statement.bindLong(1, cursor.getLong(0));
+                statement.bindString(2, cursor.getString(1));
+                statement.bindString(3, cursor.getString(2));
+                statement.bindString(4, cursor.getString(3));
+                statement.bindString(5, cursor.getString(4));
+                statement.bindLong(6, 0);
+                statement.bindString(7, cursor.getString(5));
+                statement.execute();
+            }while (cursor.moveToNext());
+        }
+        database.setTransactionSuccessful();
+        database.endTransaction();
+
+        if(cursor != null){
+            cursor.close();
+            cursor = null;
+        }
+    }
     public ArrayList<Song> getPlaylist(){
         ArrayList<Song> result = new ArrayList<Song>();
 
@@ -90,7 +116,7 @@ public class ThinkerDatabase {
             }
         }
         String[] projection ={PlayListEntry.COLUMN_ID,PlayListEntry.COLUMN_NAME,PlayListEntry.COLUMN_ALBUM,PlayListEntry.COLUMN_ARTIST,PlayListEntry.COLUMN_DURATION};
-        Cursor cursor = database.query(PlayListEntry.TABLE_NAME, projection,mSelectionClause.toString(),null,null,null,null);
+        Cursor cursor = database.query(PlayListEntry.TABLE_NAME, projection,mSelectionClause.toString(),null,null,null,PlayListEntry.COLUMN_DATE_ADD + " DESC");
         if(cursor != null && cursor.moveToFirst()) {
             do {
                 final long id = cursor.getLong(0);
@@ -139,7 +165,8 @@ public class ThinkerDatabase {
                     +PlayListEntry.COLUMN_ARTIST+" text,"
                     +PlayListEntry.COLUMN_ALBUM+" text,"
                     +PlayListEntry.COLUMN_DURATION+" text,"
-                    +PlayListEntry.COLUMN_PLAYTIME+" integer"
+                    +PlayListEntry.COLUMN_PLAYTIME+" integer,"
+                    +PlayListEntry.COLUMN_DATE_ADD+" integer"
                     +");"
             );
         }

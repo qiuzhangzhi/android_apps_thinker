@@ -60,7 +60,9 @@ public class PlaylistFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onResume() {
         super.onResume();
-        getLoaderManager().restartLoader(SONG_LOADER, null, this);
+        if(mSongAdapter.getCount() != 0){
+            getLoaderManager().restartLoader(SONG_LOADER, null, this);
+        }
     }
 
     @Override
