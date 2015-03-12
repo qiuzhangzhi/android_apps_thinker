@@ -32,6 +32,8 @@ public class Song {
      */
     public int mDuration;
 
+    public long mPlaytimes;
+
     /**
      * Constructor of <code>Song</code>
      *
@@ -42,12 +44,13 @@ public class Song {
      * @param duration The duration of a song in seconds
      */
     public Song(final long songId, final String songName, final String artistName,
-            final String albumName, final int duration) {
+            final String albumName, final int duration, final long playTimes) {
         mSongId = songId;
         mSongName = songName;
         mArtistName = artistName;
         mAlbumName = albumName;
         mDuration = duration;
+        mPlaytimes = playTimes;
     }
 
     /**

@@ -11,6 +11,12 @@
     <string name="actionbar_setting_filter">过滤歌曲</string>
     <string name="actionbar_setting_color">换肤</string>
 
+    <string name="actionbar_tab_playlist">列表</string>
+    <string name="actionbar_tab_artist">歌手</string>
+    <string name="actionbar_tab_album">专辑</string>
+    <string name="actionbar_tab_order">排行</string>
+
+
     <string name="dialog_filter_title">过滤类型</string>
     <string name="dialog_filter_num">数字</string>
     <string name="dialog_filter_letter">字母</string>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/actionbar_tab"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:background="@color/holo_purple"
+              android:layout_height="40dp">
+
+    <LinearLayout
+        android:id="@+id/playlist_layout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        >
+      <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+
+              android:layout_weight="1"
+              android:layout_gravity="center"
+              android:gravity="center"
+
+              android:drawableLeft="@drawable/tab_playlist_ic"
+              android:text="@string/actionbar_music"
+              />
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/artist_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            >
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+
+                android:drawableLeft="@drawable/tab_artist_ic"
+                android:text="@string/actionbar_tab_artist"
+                />
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/album_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            >
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+
+                android:drawableLeft="@drawable/tab_album_ic"
+                android:text="@string/actionbar_tab_album"
+                />
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/order_layout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            >
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+
+                android:drawableLeft="@drawable/tab_order_ic"
+                android:text="@string/actionbar_tab_order"
+                />
+    </LinearLayout>
+
+</LinearLayout>

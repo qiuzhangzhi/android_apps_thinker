@@ -62,6 +62,8 @@ public class MusicPlaybackService extends Service {
 
     public static final String EXIT = "com.grasp.thinker.exit";
 
+    public static final String TRACK_COMPLETE = "com.grasp.thinker.complete";
+
     public static final String FROM_MEDIA_BUTTON = "frommediabutton";
 
     public static final String PLAYSTATE_ALARM_CLOSE = "com.grasp.thinker.alarmclose";
@@ -87,6 +89,8 @@ public class MusicPlaybackService extends Service {
     public static final String CMDPREVIOUS = "previous";
 
     public static final String CMDNEXT = "next";
+
+    public static final String RECORD_POS ="record_pos";
 
     private boolean mIsSupposedToBePlaying = false;
 
@@ -512,6 +516,10 @@ public class MusicPlaybackService extends Service {
     private void notifyChange(final String what){
 
         Intent intent = new Intent(what);
+        if(TRACK_COMPLETE.equals(what)){
+            Log.d("playtimess","what");
+            intent.putExtra(RECORD_POS,mPlayList[mPlayPos]);
+        }
         sendBroadcast(intent);
 
         if(PLAYSTATE_CHANGED.equals(what)){
@@ -681,6 +689,7 @@ public class MusicPlaybackService extends Service {
 
             switch (msg.what) {
                 case TRACK_WENT_TO_NEXT:
+                    service.notifyChange(TRACK_COMPLETE);
                     service.mPlayPos = service.mNextPlayPos;
                     if (service.mCursor != null) {
                         service.mCursor.close();
@@ -691,6 +700,7 @@ public class MusicPlaybackService extends Service {
                     service.updateNotification();
                     break;
                 case TRACK_ENDED:
+                    service.notifyChange(TRACK_COMPLETE);
                     service.gotoNext(false);
                     break;
         /*        case FADEDOWN:

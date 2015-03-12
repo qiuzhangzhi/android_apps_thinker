@@ -5,6 +5,7 @@ import com.grasp.thinker.R;
 import com.grasp.thinker.ThinkerApplication;
 import com.grasp.thinker.adapters.PageAdapter;
 import com.grasp.thinker.interfaces.ColorObserver;
+import com.grasp.thinker.persistent.ThinkerDatabase;
 import com.grasp.thinker.ui.EnumFragment;
 import com.grasp.thinker.ui.fragmens.AlarmDialogFragment;
 import com.grasp.thinker.utils.MusicUtils;
@@ -133,6 +134,7 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         filter.addAction(MusicPlaybackService.META_CHANGED);
         filter.addAction(MusicPlaybackService.PLAYSTATE_CHANGED);
         filter.addAction(MusicPlaybackService.PLAYSTATE_ALARM_CLOSE);
+        filter.addAction(MusicPlaybackService.TRACK_COMPLETE);
         registerReceiver(mPlaybackStatus, filter);
 
         final long next = refreshCurrentTime();
@@ -173,6 +175,11 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
 
         // Remove any music status listeners
      //   mMusicStateListener.clear();
+    }
+
+    @Override
+    public boolean onCreatePanelMenu(int featureId, Menu menu) {
+        return super.onCreatePanelMenu(featureId, menu);
     }
 
     private void init(){
@@ -508,6 +515,10 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
                 mReference.get().updateBottomPopupInfo();
             }else if(action.equals(MusicPlaybackService.PLAYSTATE_ALARM_CLOSE)){
                 ThinkerApplication.mAlarmWhich = 0 ;
+            }if (action.equals(MusicPlaybackService.TRACK_COMPLETE)){
+                long track_id = intent.getLongExtra(MusicPlaybackService.RECORD_POS, -1);
+
+                ThinkerDatabase.getsInstance(mReference.get()).updatePlayTimes(String.valueOf(track_id));
             }
         }
 
