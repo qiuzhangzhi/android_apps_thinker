@@ -2,7 +2,7 @@
 
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: /Users/qiuzhangzhi/android_apps_thinker/src/com/grasp/thinker/IThinkerService.aidl
+ * Original file: C:\\Users\\qiuzhangzhi\\Documents\\android_apps_thinker\\src\\com\\grasp\\thinker\\IThinkerService.aidl
  */
 package com.grasp.thinker;
 public interface IThinkerService extends android.os.IInterface
