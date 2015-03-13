@@ -3,8 +3,8 @@
               android:id="@+id/actionbar_tab"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:background="@color/holo_purple"
-              android:layout_height="40dp">
+              android:background="@color/white"
+              android:layout_height="@dimen/actionbar_tab_height">
 
     <LinearLayout
         android:id="@+id/playlist_layout"
@@ -22,10 +22,23 @@
               android:gravity="center"
 
               android:drawableLeft="@drawable/tab_playlist_ic"
-              android:text="@string/actionbar_music"
+              android:text="@string/actionbar_tab_playlist"
               />
+        <View
+                android:id="@+id/indicator_playlist"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/actionbar_tab_indicator_height"
+                android:background="@color/holo_red_light"
+                />
     </LinearLayout>
 
+    <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/actionbar_tab_divider_margin"
+            android:layout_marginBottom="@dimen/actionbar_tab_divider_margin"
+            android:background="@color/gray"
+          />
     <LinearLayout
             android:id="@+id/artist_layout"
             android:layout_width="0dp"
@@ -44,7 +57,22 @@
                 android:drawableLeft="@drawable/tab_artist_ic"
                 android:text="@string/actionbar_tab_artist"
                 />
+        <View
+                android:id="@+id/indicator_artist"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/actionbar_tab_indicator_height"
+                android:background="@color/holo_red_light"
+                android:visibility="invisible"
+                />
     </LinearLayout>
+
+    <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/actionbar_tab_divider_margin"
+            android:layout_marginBottom="@dimen/actionbar_tab_divider_margin"
+            android:background="@color/gray"
+            />
 
     <LinearLayout
             android:id="@+id/album_layout"
@@ -64,10 +92,26 @@
                 android:drawableLeft="@drawable/tab_album_ic"
                 android:text="@string/actionbar_tab_album"
                 />
+
+        <View
+                android:id="@+id/indicator_album"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/actionbar_tab_indicator_height"
+                android:background="@color/holo_red_light"
+                android:visibility="invisible"
+                />
     </LinearLayout>
 
+    <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/actionbar_tab_divider_margin"
+            android:layout_marginBottom="@dimen/actionbar_tab_divider_margin"
+            android:background="@color/gray"
+            />
+
     <LinearLayout
-            android:id="@+id/order_layout"
+            android:id="@+id/rank_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -83,6 +127,13 @@
 
                 android:drawableLeft="@drawable/tab_order_ic"
                 android:text="@string/actionbar_tab_order"
+                />
+        <View
+                android:id="@+id/indicator_rank"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/actionbar_tab_indicator_height"
+                android:background="@color/holo_red_light"
+                android:visibility="invisible"
                 />
     </LinearLayout>
 

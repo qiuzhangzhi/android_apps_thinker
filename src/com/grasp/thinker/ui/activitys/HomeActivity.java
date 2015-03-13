@@ -53,9 +53,13 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
 
     private final static String TAG = "HomeActivity";
 
-    private final static int LOCAL_MUSIC = 0;
+    private final static int PLAYLIST = 0;
 
-    private final static int SETTING = 1;
+    private final static int ARTIST = 1;
+
+    private final static int ALBUM = 2;
+
+    private final static int RANK = 3;
 
     private static final int REFRESH_TIME = 1;
 
@@ -82,6 +86,15 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
     private TextView mActionBarLocalMusic;
 
     private TextView mActionBarSetting;
+
+    // actionbar tab
+    private View mIndicatorPlaylist;
+
+    private View mIndicatorArtist;
+
+    private View mIndicatorAlbum;
+
+    private View mIndicatorRank;
 
     //底部 actionbar
     private View mBABContent;
@@ -118,9 +131,8 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
-        init();
         findViews();
+        init();
         initPupUpWindow();
         setListener();
 
@@ -184,7 +196,7 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
 
     private void init(){
 
-        mCustomActionBarView = LayoutInflater.from(HomeActivity.this).inflate(R.layout.actionbar_custom,null);
+
 
 
         mViewPager = (ViewPager)findViewById(R.id.view_pager);
@@ -204,7 +216,10 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
 
         mActionBar.setCustomView(mCustomActionBarView);
         mActionBar.setBackgroundDrawable(new ColorDrawable(ThinkerApplication.mThemeColor));
-
+        mIndicatorPlaylist.setBackgroundColor(ThinkerApplication.mThemeColor);
+        mIndicatorArtist.setBackgroundColor(ThinkerApplication.mThemeColor);
+        mIndicatorAlbum.setBackgroundColor(ThinkerApplication.mThemeColor);
+        mIndicatorRank.setBackgroundColor(ThinkerApplication.mThemeColor);
         // Control the media volume
       //  setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
@@ -262,14 +277,35 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
     @Override
     public void onPageSelected(int i) {
         switch (i){
-            case LOCAL_MUSIC:
+            case PLAYLIST:
               //  mActionBarLocalMusic.setBackgroundResource(R.color.actionbar_pressed_background);
                 //mActionBarSetting.setBackgroundResource(R.color.transparent);
+                mIndicatorPlaylist.setVisibility(View.VISIBLE);
+                mIndicatorArtist.setVisibility(View.INVISIBLE);
+                mIndicatorAlbum.setVisibility(View.INVISIBLE);
+                mIndicatorRank.setVisibility(View.INVISIBLE);
                 break;
-            case SETTING:
+            case ARTIST:
                // mActionBarSetting.setBackgroundResource(R.color.actionbar_pressed_background);
                // mActionBarLocalMusic.setBackgroundResource(R.color.transparent);
+                mIndicatorPlaylist.setVisibility(View.INVISIBLE);
+                mIndicatorArtist.setVisibility(View.VISIBLE);
+                mIndicatorAlbum.setVisibility(View.INVISIBLE);
+                mIndicatorRank.setVisibility(View.INVISIBLE);
                 break;
+            case ALBUM:
+                mIndicatorPlaylist.setVisibility(View.INVISIBLE);
+                mIndicatorArtist.setVisibility(View.INVISIBLE);
+                mIndicatorAlbum.setVisibility(View.VISIBLE);
+                mIndicatorRank.setVisibility(View.INVISIBLE);
+                break;
+            case RANK:
+                mIndicatorPlaylist.setVisibility(View.INVISIBLE);
+                mIndicatorArtist.setVisibility(View.INVISIBLE);
+                mIndicatorAlbum.setVisibility(View.INVISIBLE);
+                mIndicatorRank.setVisibility(View.VISIBLE);
+                break;
+
         }
     }
 
@@ -281,11 +317,17 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.action_button_local:
-                mViewPager.setCurrentItem(LOCAL_MUSIC);
+            case R.id.playlist_layout:
+                mViewPager.setCurrentItem(PLAYLIST);
                 break;
-            case R.id.action_button_setting:
-                mViewPager.setCurrentItem(SETTING);
+            case R.id.artist_layout:
+                mViewPager.setCurrentItem(ARTIST);
+                break;
+            case R.id.album_layout:
+                mViewPager.setCurrentItem(ALBUM);
+                break;
+            case R.id.rank_layout:
+                mViewPager.setCurrentItem(RANK);
                 break;
             case R.id.actionbar_bottom:
                 mPlayBackPopupWindow.showAtLocation(mBABContent, Gravity.BOTTOM,0,0);
@@ -433,6 +475,9 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
     }
 
     private void findViews(){
+
+        mCustomActionBarView = LayoutInflater.from(HomeActivity.this).inflate(R.layout.actionbar_custom,null);
+
         mActionBarLocalMusic = (TextView)mCustomActionBarView.findViewById(R.id.action_button_local);
         mActionBarSetting = (TextView)mCustomActionBarView.findViewById(R.id.action_button_setting);
 
@@ -441,6 +486,11 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         mBABPlayPauseButton = (PlayPauseButton)findViewById(R.id.action_button_play);
 
         mBABContent =findViewById(R.id.actionbar_bottom);
+
+        mIndicatorPlaylist = findViewById(R.id.indicator_playlist);
+        mIndicatorArtist = findViewById(R.id.indicator_artist);
+        mIndicatorAlbum = findViewById(R.id.indicator_album);
+        mIndicatorRank = findViewById(R.id.indicator_rank);
 
     }
 
@@ -535,6 +585,11 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
         mActionBar.setBackgroundDrawable(new ColorDrawable(color));
         mActionBar.setDisplayShowTitleEnabled(true);
         mActionBar.setDisplayShowTitleEnabled(false);
+
+        mIndicatorPlaylist.setBackgroundColor(color);
+        mIndicatorArtist.setBackgroundColor(color);
+        mIndicatorAlbum.setBackgroundColor(color);
+        mIndicatorRank.setBackgroundColor(color);
     }
 }
 

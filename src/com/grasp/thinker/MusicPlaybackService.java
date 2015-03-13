@@ -526,11 +526,11 @@ public class MusicPlaybackService extends Service {
     private void notifyChange(final String what){
 
         Intent intent = new Intent(what);
-
-        sendBroadcast(intent);
         if(TRACK_COMPLETE.equals(what)){
             intent.putExtra(RECORD_POS, mPlayList[mPlayPos]);
-        }else if(META_CHANGED.equals(what)){
+        }
+        sendBroadcast(intent);
+        if(META_CHANGED.equals(what)){
             savePosition(mPlayList[mPlayPos]);
         }else if(PLAYSTATE_CHANGED.equals(what)){
             mNotificationHelper.updatePlayState(isPlaying());
