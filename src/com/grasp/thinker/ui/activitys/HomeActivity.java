@@ -298,14 +298,18 @@ public class HomeActivity extends FragmentActivity implements ViewPager.OnPageCh
     }
 
     private void updateBotomActionBarInfo(){
-        mBABTrackName.setText(MusicUtils.getTrackName());
-        mBABAlbumInfo.setText(String.format(getString(R.string.divider_artist_album),
-                MusicUtils.getArtistName(),MusicUtils.getAlbumName()));
+        if(MusicUtils.getTrackName() != null){
+            mBABTrackName.setText(MusicUtils.getTrackName());
+            mBABAlbumInfo.setText(String.format(getString(R.string.divider_artist_album),
+                    MusicUtils.getArtistName(),MusicUtils.getAlbumName()));
+        }
         mBABPlayPauseButton.updateState();
     }
 
     private void updateBottomPopupInfo(){
-        mPopupSongInfo.setText(String.format(getString(R.string.divider_artist_album),MusicUtils.getTrackName(),MusicUtils.getArtistName()));
+        if(MusicUtils.getTrackName() != null){
+            mPopupSongInfo.setText(String.format(getString(R.string.divider_artist_album),MusicUtils.getTrackName(),MusicUtils.getArtistName()));
+        }
         mPopupTimeDuration.setText(MusicUtils.makeTimeString(this, MusicUtils.duration()/1000));
         mPopupPlayPauseButton.updateState();
     }

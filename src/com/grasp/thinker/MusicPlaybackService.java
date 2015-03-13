@@ -1,15 +1,11 @@
 package com.grasp.thinker;
 
+import android.content.*;
 import com.grasp.thinker.utils.PreferenceUtils;
 
 import android.app.Application;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -120,6 +116,8 @@ public class MusicPlaybackService extends Service {
 
     private int mRepeatMode = REPEAT_ALL;
 
+    private SharedPreferences mSharedPreferences;
+
     private ComponentName mMediaButtonReceiverComponent;
 
     private RemoteControlClient mRemoteControlClient;
@@ -161,7 +159,7 @@ public class MusicPlaybackService extends Service {
         final HandlerThread thread = new HandlerThread("MusicPlayerHandler",
                 android.os.Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
-
+        mSharedPreferences = getSharedPreferences("service",MODE_PRIVATE);
         // Initialize the handler
         mPlayerHandler = new MusicPlayerHandler(this, thread.getLooper());
 
@@ -186,6 +184,8 @@ public class MusicPlaybackService extends Service {
         mNotificationHelper = new NotificationHelper(this);
         mTelephonyManager = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
         mTelephonyManager.listen(mPhoneStateListener,PhoneStateListener.LISTEN_CALL_STATE);
+
+        reloadPosition();
 
     }
     /**
@@ -434,6 +434,16 @@ public class MusicPlaybackService extends Service {
         mPlayList = list;
         mPlayListLen = mPlayList.length;
         mPlayer.setNextDataSource(null);
+        if(getTrackName() == null){
+            long trackId = reloadPosition();
+            for (int i = 0 ; i < list.length ; i++){
+               if(list[i] == trackId ){
+                   open(mPlayList,i);
+                   notifyChange(META_CHANGED);
+                   break;
+               }
+            }
+        }
     }
 
 
@@ -516,13 +526,13 @@ public class MusicPlaybackService extends Service {
     private void notifyChange(final String what){
 
         Intent intent = new Intent(what);
-        if(TRACK_COMPLETE.equals(what)){
-            Log.d("playtimess","what");
-            intent.putExtra(RECORD_POS,mPlayList[mPlayPos]);
-        }
-        sendBroadcast(intent);
 
-        if(PLAYSTATE_CHANGED.equals(what)){
+        sendBroadcast(intent);
+        if(TRACK_COMPLETE.equals(what)){
+            intent.putExtra(RECORD_POS, mPlayList[mPlayPos]);
+        }else if(META_CHANGED.equals(what)){
+            savePosition(mPlayList[mPlayPos]);
+        }else if(PLAYSTATE_CHANGED.equals(what)){
             mNotificationHelper.updatePlayState(isPlaying());
         }
 
@@ -617,6 +627,16 @@ public class MusicPlaybackService extends Service {
             mCursor.close();
             mCursor = null;
         }
+    }
+
+    private void savePosition(long trackId){
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putLong("trackId",trackId);
+        editor.commit();
+    }
+
+    private long reloadPosition(){
+        return  mSharedPreferences.getLong("trackId",0);
     }
 
     private PhoneStateListener mPhoneStateListener = new PhoneStateListener(){

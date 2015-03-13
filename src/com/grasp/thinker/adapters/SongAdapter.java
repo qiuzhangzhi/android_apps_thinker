@@ -59,7 +59,7 @@ public class SongAdapter extends BaseAdapter {
         }
         Song song = getItem(position);
         if(song!=null){
-            viewHolder.mSongName.setText(song.mSongName);
+            viewHolder.mSongName.setText(song.mSongName+" 播放次数："+song.mPlaytimes);
             viewHolder.mSongInfo.setText(String.format(mContext.getString(R.string.divider_artist_album),song.mArtistName,song.mAlbumName));
             viewHolder.mSongTime.setText(""+ MusicUtils.makeTimeString(mContext,song.mDuration));
         }
