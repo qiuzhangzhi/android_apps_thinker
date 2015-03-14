@@ -1,5 +1,6 @@
 package com.grasp.thinker.ui.fragmens;
 
+import android.util.Log;
 import com.grasp.thinker.R;
 import com.grasp.thinker.adapters.SongAdapter;
 import com.grasp.thinker.loaders.SongLoader;
@@ -42,7 +43,6 @@ public class PlaylistFragment extends Fragment implements LoaderManager.LoaderCa
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
-
         mRootView = inflater.inflate(R.layout.fragment_playlist,container,false);
 
         mListView = (ListView)mRootView.findViewById(R.id.song_list);
@@ -74,7 +74,6 @@ public class PlaylistFragment extends Fragment implements LoaderManager.LoaderCa
     public void onLoadFinished(Loader<List<Song>> loader, List<Song> songs) {
             mSongAdapter.updatData(songs);
             MusicUtils.refresh(mSongAdapter);
-
     }
 
     @Override
@@ -83,7 +82,6 @@ public class PlaylistFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
         MusicUtils.playAllFromUserItemClick(getActivity(),mSongAdapter,position);
     }
 }

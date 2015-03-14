@@ -17,12 +17,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import com.grasp.thinker.ThinkerConstant;
 import com.grasp.thinker.adapters.ArtistAdapter;
 import com.grasp.thinker.adapters.SongAdapter;
 import com.grasp.thinker.loaders.ArtistLoader;
 import com.grasp.thinker.loaders.SongLoader;
 import com.grasp.thinker.model.Artist;
 import com.grasp.thinker.model.Song;
+import com.grasp.thinker.ui.activitys.ArtistActivity;
 import com.grasp.thinker.utils.MusicUtils;
 
 import java.util.List;
@@ -68,9 +70,6 @@ public class ArtistFragment extends Fragment  implements LoaderManager.LoaderCal
     @Override
     public void onResume() {
         super.onResume();
-        if(mArtistAdapter.getCount() != 0){
-            getLoaderManager().restartLoader(SONG_LOADER, null, this);
-        }
     }
 
     @Override
@@ -91,7 +90,12 @@ public class ArtistFragment extends Fragment  implements LoaderManager.LoaderCal
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-       // MusicUtils.playAllFromUserItemClick(getActivity(),mSongAdapter,position);
+        Artist mArtist = mArtistAdapter.getItem(position);
+        Intent intent = new Intent(getActivity(), ArtistActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putLong(ThinkerConstant.ID, mArtist.mArtistId);
+        bundle.putString(ThinkerConstant.ARTIST_NAME,mArtist.mArtistName);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

@@ -147,5 +147,6 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
     public int setContentView() {
         return R.layout.activity_home;
     }
+
 }
 

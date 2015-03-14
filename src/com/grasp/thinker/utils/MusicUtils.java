@@ -261,7 +261,7 @@ public class MusicUtils {
             return;
         }
         try {
-            if(position == mService.getQueuePosition()){
+            if(list[position] == mService.getSongId()){
                    playOrPause();
             }else{
                 mService.open(list,position);

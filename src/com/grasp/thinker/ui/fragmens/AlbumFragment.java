@@ -1,21 +1,25 @@
 package com.grasp.thinker.ui.fragmens;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import com.grasp.thinker.R;
+import com.grasp.thinker.ThinkerConstant;
 import com.grasp.thinker.adapters.AlbumAdapter;
 import com.grasp.thinker.adapters.ArtistAdapter;
 import com.grasp.thinker.loaders.AlbumLoader;
 import com.grasp.thinker.loaders.ArtistLoader;
 import com.grasp.thinker.model.Album;
 import com.grasp.thinker.model.Artist;
+import com.grasp.thinker.ui.activitys.AlbumActivity;
 
 import java.util.List;
 
@@ -47,7 +51,6 @@ public class AlbumFragment extends Fragment  implements LoaderManager.LoaderCall
         mListView = (ListView)mRootView.findViewById(R.id.artist_list);
         mListView.setAdapter(mAlbumAdapter);
         mListView.setOnItemClickListener(this);
-
         return mRootView;
     }
 
@@ -60,9 +63,6 @@ public class AlbumFragment extends Fragment  implements LoaderManager.LoaderCall
     @Override
     public void onResume() {
         super.onResume();
-        if(mAlbumAdapter.getCount() != 0){
-            getLoaderManager().restartLoader(SONG_LOADER, null, this);
-        }
     }
 
     @Override
@@ -84,6 +84,13 @@ public class AlbumFragment extends Fragment  implements LoaderManager.LoaderCall
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        // MusicUtils.playAllFromUserItemClick(getActivity(),mSongAdapter,position);
+        Album album = mAlbumAdapter.getItem(position);
+        Bundle bundle = new Bundle();
+        bundle.putLong(ThinkerConstant.ID, album.mAlbumId);
+        bundle.putString(ThinkerConstant.ALUBM_NAME, album.mAlbumName);
+
+        final Intent intent = new Intent(getActivity(), AlbumActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

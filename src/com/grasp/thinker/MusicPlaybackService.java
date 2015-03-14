@@ -114,7 +114,7 @@ public class MusicPlaybackService extends Service {
      */
     public static final int REPEAT_ALL = 2;
 
-    private int mRepeatMode = REPEAT_ALL;
+    private static int mRepeatMode = REPEAT_ALL;
 
     private SharedPreferences mSharedPreferences;
 
@@ -472,6 +472,14 @@ public class MusicPlaybackService extends Service {
         }
     }
 
+    private long getSongId(){
+        synchronized (this) {
+            if (mCursor == null) {
+                return 0;
+            }
+            return mCursor.getLong(mCursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns._ID));
+        }
+    }
     private String getTrackName() {
         synchronized (this) {
             if (mCursor == null) {
@@ -1150,7 +1158,10 @@ public class MusicPlaybackService extends Service {
             return mService.get().getQueuePosition();
         }
 
-
+        @Override
+        public long getSongId() throws RemoteException {
+            return mService.get().getSongId();
+        }
 
         @Override
         public String getTrackName() throws RemoteException {

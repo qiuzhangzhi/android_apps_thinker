@@ -6,7 +6,7 @@
         >
 
 <TextView
-        android:id="@+id/action_button_local"
+        android:id="@+id/action_button_title"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
 
@@ -18,21 +18,5 @@
         android:textColor="@color/white"
         android:text="@string/actionbar_music"
         android:textSize="@dimen/text_size_large"
-        />
-<TextView
-        android:id="@+id/action_button_setting"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-
-        android:layout_toRightOf="@id/action_button_local"
-        android:gravity="center"
-        android:paddingLeft="@dimen/actionbar_button_padding"
-        android:paddingRight="@dimen/actionbar_button_padding"
-
-        android:textColor="@color/white"
-        android:text="@string/actionbar_setting"
-        android:background="@color/transparent"
-
-        android:visibility="gone"
         />
 </RelativeLayout>

@@ -23,6 +23,7 @@ import com.grasp.thinker.utils.MusicUtils;
 import com.grasp.thinker.utils.ThinkerUtils;
 import com.grasp.thinker.widgets.ColorSchemeDialog;
 import com.grasp.thinker.widgets.PlayPauseButton;
+import com.grasp.thinker.widgets.RepeatButton;
 import com.grasp.thinker.widgets.RepeatingImageButton;
 import com.grasp.thinker.widgets.theme.ThemeableSeekBar;
 
@@ -57,6 +58,8 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
 
     private View mCustomActionBarView;
 
+    private TextView mActionbarTitle;
+
     //底部 actionbar
     private View mBABContent;
 
@@ -85,6 +88,8 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
 
     private RepeatingImageButton mPopupNextButton;
 
+    private RepeatButton mPopupRepeatButton;
+
     private ImageButton mPopupAlarmButton;
 
     @Override
@@ -102,7 +107,7 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
     private void init(){
 
         mActionBar = getActionBar();
-        mActionBar.setDisplayHomeAsUpEnabled(false);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setDisplayShowHomeEnabled(false);
         mActionBar.setDisplayShowCustomEnabled(true);
         mActionBar.setDisplayShowTitleEnabled(false);
@@ -182,6 +187,7 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
             case R.id.actionbar_bottom:
                 final long next = refreshCurrentTime();
                 queueNextRefresh(next);
+                mPopupRepeatButton.updateRepeatState();
                 mPlayBackPopupWindow.showAtLocation(mBABContent, Gravity.BOTTOM,0,0);
                 break;
             case R.id.popup_alarm:
@@ -338,7 +344,7 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
         mPopupPreviousButton = (RepeatingImageButton)mPopupWindowContent.findViewById(R.id.popup_button_previous);
         mPopupNextButton =(RepeatingImageButton)mPopupWindowContent.findViewById(R.id.popup_button_next);
         mPopupAlarmButton = (ImageButton)mPopupWindowContent.findViewById(R.id.popup_alarm);
-
+        mPopupRepeatButton =(RepeatButton)mPopupWindowContent.findViewById(R.id.popup_button_repeat);
 
         mPlayBackPopupWindow = new PopupWindow(mPopupWindowContent, ViewGroup.LayoutParams.MATCH_PARENT,
                 ThinkerUtils.dp2px(this, 100),true);
@@ -358,6 +364,7 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
     private void findViews(){
 
         mCustomActionBarView = LayoutInflater.from(BaseActivity.this).inflate(R.layout.actionbar_custom,null);
+        mActionbarTitle = (TextView) mCustomActionBarView.findViewById(R.id.action_button_title);
 
         mBABTrackName = (TextView)findViewById(R.id.bottom_action_bar_line_one);
         mBABAlbumInfo = (TextView)findViewById(R.id.bottom_action_bar_line_two);
@@ -446,4 +453,8 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
     }
 
     public abstract int setContentView();
+
+    public void setActionbarTitle(String title){
+        mActionbarTitle.setText(title);
+    }
 }

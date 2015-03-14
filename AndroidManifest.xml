@@ -35,6 +35,10 @@
                   android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar"
                 />
         <activity android:name=".ui.activitys.BaseActivity"/>
+        <activity android:name=".ui.activitys.ArtistActivity"
+                >
+        </activity>
+        <activity android:name=".ui.activitys.AlbumActivity"/>
 
         <receiver android:name=".MediaButtonIntentReceiver" >
             <intent-filter>
