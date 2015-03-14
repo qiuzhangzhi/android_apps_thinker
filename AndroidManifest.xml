@@ -34,6 +34,7 @@
         <activity android:name=".ui.activitys.DialogFilterActivity"
                   android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar"
                 />
+        <activity android:name=".ui.activitys.BaseActivity"/>
 
         <receiver android:name=".MediaButtonIntentReceiver" >
             <intent-filter>
