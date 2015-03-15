@@ -17,6 +17,7 @@
     <dimen name="actionbar_tab_indicator_height">3dp</dimen>
     <dimen name="actionbar_tab_divider_margin">8dp</dimen>
 
+    <dimen name="padding_xlarge">35dp</dimen>
     <dimen name="padding_large">25dp</dimen>
     <dimen name="padding_nomal">15dp</dimen>
 

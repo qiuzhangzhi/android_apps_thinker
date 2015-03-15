@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/item_padding_nomal"
+                android:paddingRight="@dimen/item_padding_nomal"
+                android:paddingTop="@dimen/item_padding_large"
+                android:background="@color/lighter_gray"
+        >
+    <TextView
+            android:id="@+id/artist_album"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textSize="@dimen/text_size_nomal"
+            android:textColor="@color/black"
+            />
+    <com.grasp.thinker.widgets.TextProgressBar
+            android:id="@+id/rank_progress"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+
+            android:layout_below="@id/artist_album"
+
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progressDrawable="@drawable/lay_rank_progress"
+            android:layout_marginTop="@dimen/item_padding_small"
+            android:layout_marginRight="@dimen/padding_xlarge"
+            android:progress="0"
+            android:max="50"
+            />
+
+    <TextView
+            android:id="@+id/progress_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/artist_album"
+
+            />
+
+    <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+
+            android:layout_below="@id/rank_progress"
+            android:layout_marginTop="@dimen/item_padding_large"
+
+            android:background="@color/gray"
+            />
+</RelativeLayout>
