@@ -5,11 +5,19 @@
     <!-- common -->
     <string name="divider_artist_album">%1$s - %2$s</string>
     <string name="hex">#</string>
+    <string name="song_num">%1$d首</string>
     <!-- actionbar -->
     <string name="actionbar_music">音乐</string>
     <string name="actionbar_setting">设置</string>
     <string name="actionbar_setting_filter">过滤歌曲</string>
     <string name="actionbar_setting_color">换肤</string>
+    <string name="actionbar_search">搜索</string>
+
+    <string name="actionbar_tab_playlist">列表</string>
+    <string name="actionbar_tab_artist">歌手</string>
+    <string name="actionbar_tab_album">专辑</string>
+    <string name="actionbar_tab_order">排行</string>
+
 
     <string name="dialog_filter_title">过滤类型</string>
     <string name="dialog_filter_num">数字</string>
@@ -40,4 +48,6 @@
     <!-- Do not translate. Duration format for duration >= 1 hour -->
     <string name="durationformatlong" translatable="false">%1$d:%2$02d:%3$02d</string>
 
+    <!-- album list-->
+    <string name="album_item_info">%1$d首 %2$s</string>
 </resources>

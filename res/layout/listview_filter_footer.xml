@@ -19,8 +19,8 @@
 
      <ImageView
             android:id="@+id/filter_editer_add"
-            android:layout_width="@dimen/ico_size_nomal"
-            android:layout_height="@dimen/ico_size_nomal"
+            android:layout_width="@dimen/ico_size_small"
+            android:layout_height="@dimen/ico_size_small"
 
             android:layout_gravity="center_vertical"
             android:src="@drawable/dialog_filter_add_ic"

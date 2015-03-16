@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
-              android:layout_width="250dp"
+              android:layout_width="300dp"
               android:layout_height="match_parent"
               android:paddingLeft="@dimen/item_padding_large"
 
@@ -28,8 +28,8 @@
                 />
         <ImageView
                 android:id="@+id/filter_add"
-                android:layout_width="@dimen/ico_size_nomal"
-                android:layout_height="@dimen/ico_size_nomal"
+                android:layout_width="@dimen/ico_size_small"
+                android:layout_height="@dimen/ico_size_small"
                 android:src="@drawable/dialog_filter_add_ic"
                 android:layout_gravity="center_vertical"
                 />

@@ -42,7 +42,7 @@
                     android:id="@+id/bottom_action_bar_line_two"
                     style="@style/BottomActionBarText"
                     android:textSize="@dimen/text_size_small"
-
+                    android:textColor="@color/darker_gray"
                     android:layout_below="@id/bottom_action_bar_line_one"
                     />
         </RelativeLayout>

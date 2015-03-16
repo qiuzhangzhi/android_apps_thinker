@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 
+import android.util.Log;
 import com.grasp.thinker.model.Song;
 import com.grasp.thinker.persistent.DatabaseContract.*;
 import com.grasp.thinker.utils.PreferenceUtils;
@@ -115,8 +116,8 @@ public class ThinkerDatabase {
                 mSelectionClause.append("AND "+ PlayListEntry.COLUMN_NAME + " NOT GLOB '" + filter +"*' ");
             }
         }
-        String[] projection ={PlayListEntry.COLUMN_ID,PlayListEntry.COLUMN_NAME,PlayListEntry.COLUMN_ALBUM,PlayListEntry.COLUMN_ARTIST,PlayListEntry.COLUMN_DURATION};
-        Cursor cursor = database.query(PlayListEntry.TABLE_NAME, projection,mSelectionClause.toString(),null,null,null,PlayListEntry.COLUMN_DATE_ADD + " DESC");
+        String[] projection ={PlayListEntry.COLUMN_ID,PlayListEntry.COLUMN_NAME,PlayListEntry.COLUMN_ALBUM,PlayListEntry.COLUMN_ARTIST,PlayListEntry.COLUMN_DURATION,PlayListEntry.COLUMN_PLAYTIME};
+        Cursor cursor = database.query(PlayListEntry.TABLE_NAME, projection,mSelectionClause.toString(),null,null,null,PlayListEntry.COLUMN_PLAYTIME +" DESC , "+PlayListEntry.COLUMN_DATE_ADD + " DESC");
         if(cursor != null && cursor.moveToFirst()) {
             do {
                 final long id = cursor.getLong(0);
@@ -127,7 +128,9 @@ public class ThinkerDatabase {
 
                 final int songDurationSecond = (int) songDuration/1000;
 
-                final Song song = new Song(id,songName,songArtist,songAlbum,songDurationSecond);
+                final long songPlayTimes = cursor.getLong(5);
+
+                final Song song = new Song(id,songName,songArtist,songAlbum,songDurationSecond,songPlayTimes);
 
                 result.add(song);
             }while (cursor.moveToNext());
@@ -138,6 +141,23 @@ public class ThinkerDatabase {
             cursor = null;
         }
         return result;
+    }
+
+    public void updatePlayTimes(String track_id){
+        Cursor cursor = database.query(PlayListEntry.TABLE_NAME,new String[]{PlayListEntry.COLUMN_PLAYTIME}," id = ?",new String[]{track_id},null,null,null);
+
+        if(cursor != null && cursor.moveToFirst()){
+            long playtimes = cursor.getLong(0);
+
+            ContentValues values = new ContentValues();
+            values.put(PlayListEntry.COLUMN_PLAYTIME,++playtimes);
+
+            database.update(PlayListEntry.TABLE_NAME, values, " id = ?", new String[]{track_id});
+        }
+        if(cursor != null){
+            cursor.close();
+            cursor = null;
+        }
     }
 
     private class DBHelper extends SQLiteOpenHelper{

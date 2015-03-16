@@ -32,7 +32,7 @@ public class AlarmDialogFragment extends DialogFragment {
 
     private static final String TAG = "AlarmDialogFragment";
 
-    private boolean DEBUG = true;
+    private boolean DEBUG = false;
 
     private View mTitleView;
 

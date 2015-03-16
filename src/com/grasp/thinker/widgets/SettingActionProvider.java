@@ -55,7 +55,7 @@ public class SettingActionProvider extends ActionProvider {
                         return true;
                     }
                 });
-        subMenu.add(mContext.getString(R.string.actionbar_setting_color)).setIcon(null)
+        subMenu.add(mContext.getString(R.string.actionbar_setting_color)).setIcon(R.drawable.menu_skin)
                 .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {

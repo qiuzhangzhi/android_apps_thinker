@@ -6,6 +6,7 @@
           android:title="@string/actionbar_setting"
           android:showAsAction="always"
           android:icon="@drawable/lay_actionbar_setting"
+          android:orderInCategory="2"
           android:actionProviderClass="com.grasp.thinker.widgets.SettingActionProvider"
             />
 

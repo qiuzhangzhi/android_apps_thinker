@@ -93,20 +93,14 @@ public class MusicUtils {
     public static final class ServiceToken {
         public ContextWrapper mWrappedContext;
 
-        /**
-         * Constructor of <code>ServiceToken</code>
-         *
-         * @param context The {@link ContextWrapper} to use
-         */
+
         public ServiceToken(final ContextWrapper context) {
             mWrappedContext = context;
         }
     }
 
 
-    /**
-     * Plays or pauses the music.
-     */
+
     public static void playOrPause() {
         try {
             if (mService != null && mService.isInitialized()) {
@@ -213,9 +207,6 @@ public class MusicUtils {
         return null;
     }
 
-    /**
-     * @return The current artist name.
-     */
     public static final String getArtistName() {
         if (mService != null) {
             try {
@@ -226,9 +217,7 @@ public class MusicUtils {
         return null;
     }
 
-    /**
-     * @return The current album name.
-     */
+
     public static final String getAlbumName() {
         if (mService != null) {
             try {
@@ -249,19 +238,14 @@ public class MusicUtils {
         }
 
     }
-    /**
-     * @param context The {@link Context} to use.
-     * @param list The list of songs to play.
-     * @param position Specify where to start.
-     * @param forceShuffle True to force a shuffle, false otherwise.
-     */
+
     public static void playAll(final Context context, final long[] list, int position,
             final boolean forceShuffle) {
         if (list.length == 0 || mService == null) {
             return;
         }
         try {
-            if(position == mService.getQueuePosition()){
+            if(list[position] == mService.getSongId()){
                    playOrPause();
             }else{
                 mService.open(list,position);

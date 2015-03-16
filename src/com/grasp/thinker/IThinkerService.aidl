@@ -19,6 +19,7 @@ interface IThinkerService{
     int getRepeatMode();
     void setRepeatMode(int repeatmode);
 
+    long getSongId();
     String getArtistName();
     String getTrackName();
     String getAlbumName();

@@ -27,8 +27,8 @@
                 />
         <ImageView
                 android:id="@+id/filter_num_editer"
-                android:layout_width="@dimen/ico_size_nomal"
-                android:layout_height="@dimen/ico_size_nomal"
+                android:layout_width="@dimen/ico_size_small"
+                android:layout_height="@dimen/ico_size_small"
                 android:src="@drawable/dialog_filter_remove_ic"
                 />
     </LinearLayout>
@@ -59,8 +59,8 @@
                 />
         <ImageView
                 android:id="@+id/filter_letter_editer"
-                android:layout_width="@dimen/ico_size_nomal"
-                android:layout_height="@dimen/ico_size_nomal"
+                android:layout_width="@dimen/ico_size_small"
+                android:layout_height="@dimen/ico_size_small"
                 android:src="@drawable/dialog_filter_remove_ic"
                 />
     </LinearLayout>
