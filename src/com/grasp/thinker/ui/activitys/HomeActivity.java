@@ -40,6 +40,14 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
 
     private View mIndicatorRank;
 
+    private View mLayoutPlaylist;
+
+    private View mLayoutArtist;
+
+    private View mLayoutAlbum;
+
+    private View mLayoutRank;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,6 +136,16 @@ public class HomeActivity extends BaseActivity implements ViewPager.OnPageChange
         mIndicatorArtist = findViewById(R.id.indicator_artist);
         mIndicatorAlbum = findViewById(R.id.indicator_album);
         mIndicatorRank = findViewById(R.id.indicator_rank);
+
+        mLayoutPlaylist = findViewById(R.id.playlist_layout);
+        mLayoutArtist = findViewById(R.id.artist_layout);
+        mLayoutAlbum = findViewById(R.id.album_layout);
+        mLayoutRank = findViewById(R.id.rank_layout);
+
+        mLayoutPlaylist.setOnClickListener(this);
+        mLayoutArtist.setOnClickListener(this);
+        mLayoutAlbum.setOnClickListener(this);
+        mLayoutRank.setOnClickListener(this);
     }
 
     private void setListener() {
