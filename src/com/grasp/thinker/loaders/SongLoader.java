@@ -22,7 +22,7 @@ public class SongLoader extends WrappedAsyncTaskLoader<List<Song>> {
 
     private static final String TAG = "SongLoader" ;
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private int i = 0;
     private final ArrayList<Song> mSongList = new ArrayList<Song>();

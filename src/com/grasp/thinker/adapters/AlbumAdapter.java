@@ -63,7 +63,7 @@ public class AlbumAdapter extends BaseAdapter{
         if(album!=null){
             ImageLoader imageLoader = ImageLoader.getInstance();
             DisplayImageOptions options = new DisplayImageOptions.Builder()
-                    .showImageOnFail(R.drawable.ic_launcher)
+                    .showImageOnFail(R.drawable.defaut_album)
                     .build();
 
             imageLoader.displayImage("content://media/external/audio/albumart/"+album.mAlbumId, viewHolder.mAlbumIco,options);

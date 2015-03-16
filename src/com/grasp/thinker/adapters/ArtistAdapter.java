@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.grasp.thinker.R;
 import com.grasp.thinker.model.Artist;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -59,8 +60,6 @@ public class ArtistAdapter extends BaseAdapter {
         }
         Artist artist = getItem(position);
         if(artist!=null){
-            /*ImageLoader imageLoader = ImageLoader.getInstance();
-            imageLoader.displayImage("content://media/external/audio/albumart/"+artist.mArtistId, viewHolder.mArtistIco);*/
             viewHolder.mArtistName.setText(artist.mArtistName);
             viewHolder.mSongNum.setText(String.format(mContext.getString(R.string.song_num),artist.mSongNumber));
         }

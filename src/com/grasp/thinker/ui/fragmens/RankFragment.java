@@ -51,7 +51,13 @@ public class RankFragment extends Fragment implements LoaderManager.LoaderCallba
         getLoaderManager().initLoader(SONG_LOADER,null,this);
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mRankAdapter.getCount() != 0){
+            getLoaderManager().restartLoader(SONG_LOADER, null, this);
+        }
+    }
 
     @Override
     public Loader<List<Song>> onCreateLoader(int i, Bundle bundle) {

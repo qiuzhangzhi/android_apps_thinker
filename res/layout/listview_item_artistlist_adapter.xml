@@ -12,7 +12,10 @@
     <ImageView
             android:id="@+id/artist_ico"
             android:layout_width="@dimen/ico_size_normal"
-            android:layout_height="@dimen/ico_size_normal"/>
+            android:layout_height="@dimen/ico_size_normal"
+            android:src="@drawable/defaut_artist"
+            android:scaleType="centerCrop"
+            />
 
     <LinearLayout
             android:layout_width="match_parent"

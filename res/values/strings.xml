@@ -11,6 +11,7 @@
     <string name="actionbar_setting">设置</string>
     <string name="actionbar_setting_filter">过滤歌曲</string>
     <string name="actionbar_setting_color">换肤</string>
+    <string name="actionbar_search">搜索</string>
 
     <string name="actionbar_tab_playlist">列表</string>
     <string name="actionbar_tab_artist">歌手</string>

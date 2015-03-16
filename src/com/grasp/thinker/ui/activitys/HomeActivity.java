@@ -15,7 +15,7 @@ import android.view.View;
 public class HomeActivity extends BaseActivity implements ViewPager.OnPageChangeListener
 {
 
-    private final static boolean DEBUG = true;
+    private final static boolean DEBUG = false;
 
     private final static String TAG = "HomeActivity";
 

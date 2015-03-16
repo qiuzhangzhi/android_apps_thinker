@@ -7,42 +7,24 @@ import android.text.TextUtils;
  */
 public class Song {
 
-    /**
-     * The unique Id of the song
-     */
+
     public long mSongId;
 
-    /**
-     * The song name
-     */
+
     public String mSongName;
 
-    /**
-     * The song artist
-     */
+
     public String mArtistName;
 
-    /**
-     * The song album
-     */
+
     public String mAlbumName;
 
-    /**
-     * The song duration in seconds
-     */
+
     public int mDuration;
 
     public long mPlaytimes;
 
-    /**
-     * Constructor of <code>Song</code>
-     *
-     * @param songId The Id of the song
-     * @param songName The name of the song
-     * @param artistName The song artist
-     * @param albumName The song album
-     * @param duration The duration of a song in seconds
-     */
+
     public Song(final long songId, final String songName, final String artistName,
             final String albumName, final int duration, final long playTimes) {
         mSongId = songId;
@@ -53,9 +35,7 @@ public class Song {
         mPlaytimes = playTimes;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -68,9 +48,7 @@ public class Song {
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {
@@ -101,9 +79,7 @@ public class Song {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String toString() {
         return mSongName;

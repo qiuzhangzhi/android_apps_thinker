@@ -1,7 +1,10 @@
 package com.grasp.thinker.ui.activitys;
 
 import android.app.ActionBar;
+import android.app.SearchManager;
+import android.app.SearchableInfo;
 import android.content.*;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +15,7 @@ import android.util.Log;
 import android.view.*;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
+import android.widget.SearchView;
 import android.widget.TextView;
 import com.grasp.thinker.MusicPlaybackService;
 import com.grasp.thinker.R;
@@ -20,6 +24,7 @@ import com.grasp.thinker.interfaces.ColorObserver;
 import com.grasp.thinker.persistent.ThinkerDatabase;
 import com.grasp.thinker.ui.fragmens.AlarmDialogFragment;
 import com.grasp.thinker.utils.MusicUtils;
+import com.grasp.thinker.utils.SearchViewStyle;
 import com.grasp.thinker.utils.ThinkerUtils;
 import com.grasp.thinker.widgets.ColorSchemeDialog;
 import com.grasp.thinker.widgets.PlayPauseButton;
@@ -241,18 +246,15 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
             mLastSeekEventTime = 0;
         } else {
             if (delta < 5000) {
-                // seek at 10x speed for the first 5 seconds
                 delta = delta * 10;
             } else {
-                // seek at 40x after that
                 delta = 50000 + (delta - 5000) * 40;
             }
             long newpos = mStartSeekPos + delta;
             final long duration = MusicUtils.duration();
             if (newpos >= duration) {
-                // move to next track
                 MusicUtils.next();
-                mStartSeekPos -= duration; // is OK to go negative
+                mStartSeekPos -= duration;
                 newpos -= duration;
             }
             if (delta - mLastSeekEventTime > 250 || repcnt < 0) {
@@ -385,7 +387,32 @@ public abstract class BaseActivity extends FragmentActivity implements View.OnCl
     public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.actionbar_search, menu);
         inflater.inflate(R.menu.activity_home_actions, menu);
+
+
+        final SearchView searchView = (SearchView)menu.findItem(R.id.menu_search).getActionView();
+        final SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+        final SearchableInfo searchableInfo = searchManager.getSearchableInfo(getComponentName());
+        searchView.setSearchableInfo(searchableInfo);
+        SearchViewStyle.on(searchView)
+                     .setCursorColor(getResources().getColor(R.color.lighter_gray))
+                     .setTextColor(getResources().getColor(R.color.lighter_gray))
+                     .setSearchHintDrawable(R.drawable.action_search)
+                     .setSearchPlateTint(getResources().getColor(R.color.lighter_gray));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(final String query) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(final String newText) {
+                return false;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 

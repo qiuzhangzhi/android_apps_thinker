@@ -1,14 +1,3 @@
-/*
- * Copyright (C) 2007 The Android Open Source Project Licensed under the Apache
- * License, Version 2.0 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
- * or agreed to in writing, software distributed under the License is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the specific language
- * governing permissions and limitations under the License.
- */
-
 package com.grasp.thinker;
 
 
@@ -24,28 +13,19 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 import android.view.KeyEvent;
 
-/**
- * Used to control headset playback.
- *   Single press: pause/resume
- *   Double press: next track
- *   Triple press: previous track
- *   Long press: voice search
- */
+
 public class MediaButtonIntentReceiver extends WakefulBroadcastReceiver {
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private static final String TAG = "MediaButtonIntentReceiver";
 
     private static final int MSG_LONGPRESS_TIMEOUT = 1;
     private static final int MSG_HEADSET_DOUBLE_CLICK_TIMEOUT = 2;
 
-    private static final int LONG_PRESS_DELAY = 1000;
     private static final int DOUBLE_CLICK = 800;
 
     private static WakeLock mWakeLock = null;
     private static int mClickCounter = 0;
     private static long mLastClickTime = 0;
-    private static boolean mDown = false;
-    private static boolean mLaunched = false;
 
     private static Handler mHandler = new Handler() {
 
@@ -77,9 +57,7 @@ public class MediaButtonIntentReceiver extends WakefulBroadcastReceiver {
         }
     };
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void onReceive(final Context context, final Intent intent) {
         if (DEBUG) Log.v(TAG, "Received intent: " + intent);
@@ -122,13 +100,6 @@ public class MediaButtonIntentReceiver extends WakefulBroadcastReceiver {
                 if (action == KeyEvent.ACTION_DOWN) {
 
                 if (event.getRepeatCount() == 0) {
-                        // Only consider the first event in a sequence, not the repeat events,
-                        // so that we don't trigger in cases where the first event went to
-                        // a different app (e.g. when the user ends a phone call by
-                        // long pressing the headset button)
-
-                        // The service may or may not be running, but we need to send it
-                        // a command.
                         if (keycode == KeyEvent.KEYCODE_HEADSETHOOK) {
                             if (eventtime - mLastClickTime >= DOUBLE_CLICK) {
                                 mClickCounter = 0;
@@ -176,7 +147,6 @@ public class MediaButtonIntentReceiver extends WakefulBroadcastReceiver {
             mWakeLock.setReferenceCounted(false);
         }
         if (DEBUG) Log.v(TAG, "Acquiring wake lock and sending " + msg.what);
-        // Make sure we don't indefinitely hold the wake lock under any circumstances
         mWakeLock.acquire(10000);
 
         mHandler.sendMessageDelayed(msg, delay);
