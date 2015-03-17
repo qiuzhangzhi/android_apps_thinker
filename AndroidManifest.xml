@@ -36,9 +36,12 @@
                 />
         <activity android:name=".ui.activitys.BaseActivity"/>
         <activity android:name=".ui.activitys.ArtistActivity"
+                  android:screenOrientation="portrait"
                 >
         </activity>
-        <activity android:name=".ui.activitys.AlbumActivity"/>
+        <activity android:name=".ui.activitys.AlbumActivity"
+                  android:screenOrientation="portrait"
+                />
 
         <receiver android:name=".MediaButtonIntentReceiver" >
             <intent-filter>
